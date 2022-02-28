@@ -1,5 +1,5 @@
-# angular-template
-Template angular v12 using ng-zorro by DK Team
+# angular-template [Việt Nam]
+Template angular v12 using ng-zorro by DK Team 
 
 Getting Started
 1 install angular v12 
@@ -13,4 +13,8 @@ Getting Started
 4 install npm project (Run for the first time)
 # npm i
 
-
+Tool IDE
+1 Download Visual Studio Code
+# https://code.visualstudio.com/download
+2 Insall extension Visual Studio Code
+# Angular Extension Pack (by Loiane Groner)
