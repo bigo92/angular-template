@@ -20,8 +20,13 @@
           <li nz-menu-item nzMatchRouter>
             <a>Icon</a>
           </li>
-          <li nz-menu-item nzMatchRouter>
-            <a>Example</a>
+          <li nz-submenu nzTitle="Example">
+            <ul>
+              <li nz-menu-item nzMatchRouter>
+                <a routerLink="/example/basic">Basic</a>
+              </li>
+              <li nz-menu-item nzMatchRouter>Table Tree</li>
+            </ul>
           </li>
         </ul>
       </li>

@@ -22,7 +22,6 @@ registerLocaleData(vi);
   ],
   imports: [
     BrowserModule,
-    FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
     IconsProviderModule,
