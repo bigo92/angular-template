@@ -95,7 +95,8 @@ export class DialogService {
       component: null,
       inputs: {},
       title: "",
-      escClose: false
+      escClose: false,
+      closeOnNavigation: false
     };
     if (options) {
       options(modalConfig);
@@ -108,6 +109,7 @@ export class DialogService {
       nzComponentParams: modalConfig.inputs,
       nzClosable: false,
       nzKeyboard: modalConfig.escClose,
+      nzCloseOnNavigation: modalConfig.closeOnNavigation,
       nzFooter: null,
       nzClassName: modalConfig.size
     });

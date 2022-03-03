@@ -29,6 +29,7 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
 @NgModule({
   imports: [
@@ -41,7 +42,9 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     NzPageHeaderModule,
     NzBreadCrumbModule,
     NzDropDownModule,
-    NzIconModule
+    NzIconModule,
+    RenderErrorsModule,
+    NzFormModule
     // InputTextModule,
     // InputTextSearchModule,
     // InputNumberModule,
@@ -73,7 +76,9 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     NzPageHeaderModule,
     NzBreadCrumbModule,
     NzDropDownModule,
-    NzIconModule
+    NzIconModule,
+    RenderErrorsModule,
+    NzFormModule
     // InputTextModule,
     // InputTextSearchModule,
     // InputNumberModule,

@@ -11,4 +11,5 @@ export interface DialogConfigModal {
   component: any;
   inputs: any;
   escClose: boolean;
+  closeOnNavigation: boolean;
 }

@@ -1,3 +1,6 @@
+import { BasicDialogComponent } from './basic-dialog/basic-dialog.component';
+import { DialogSize, DialogMode } from './../../../_base/servicers/dialog.service';
+import { DialogService } from 'src/app/_base/servicers/dialog.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -13,6 +16,10 @@ export class BasicComponent implements OnInit {
   listOfData: readonly Data[] = [];
   listOfCurrentPageData: readonly Data[] = [];
   setOfCheckedId = new Set<number>();
+
+  constructor(private dialogService: DialogService){
+
+  }
 
   updateCheckedSet(id: number, checked: boolean): void {
     if (checked) {
@@ -64,6 +71,29 @@ export class BasicComponent implements OnInit {
       address: `London, Park Lane no. ${index}`,
       disabled: index % 2 === 0
     }));
+  }
+
+  getData(){
+
+  }
+
+  createData(){
+    const dialog = this.dialogService.openDialog(option => {
+      option.title = 'Thêm mới dữ liệu';
+      option.size = DialogSize.xlarge;
+      option.component = BasicDialogComponent;
+      option.inputs = { //tham số cần truyền vào cho dialog @Input
+        id: null, //Thêm ko cần id, dành cho sửa và xem
+        mode: DialogMode.add
+      }; 
+    },(eventNames: string, eventValue: any) => {
+      if(eventNames === 'onClose'){ //sự kiện ấn đóng của dialog báo về @Output
+        this.dialogService.closeDialogById(dialog.id); //đong dialog
+        if (eventValue) {
+          this.getData(); // refesh lại table
+        }
+      }
+    });
   }
 
 }

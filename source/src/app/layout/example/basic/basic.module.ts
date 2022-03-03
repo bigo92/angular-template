@@ -1,3 +1,4 @@
+import { BasicDialogComponent } from './basic-dialog/basic-dialog.component';
 import { FormModule } from './../../../_base/controls/form/form.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -8,8 +9,11 @@ import { BasicRoutes } from './basic.routing';
   imports: [
     CommonModule,
     FormModule, // thư viện chung
-    BasicRoutes // thêm route vào module
+    BasicRoutes // thêm route vào module,
   ],
-  declarations: [BasicComponent]
+  declarations: [
+    BasicComponent,
+    BasicDialogComponent // thêm dialog cần sử dụng vào đây
+  ]
 })
 export class BasicModule { }
