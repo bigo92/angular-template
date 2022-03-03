@@ -3,7 +3,7 @@
   "page": 1,
   "size": 30,
   "loadMore": true,
-  "keySearch": "từ khóa cần tìm",
+  "textSearch": "từ khóa cần tìm",
   "valueSearch": [1,2,3] or ["a","b","c"] //mảng id cần tìm
 }
 
