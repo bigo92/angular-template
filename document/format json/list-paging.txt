@@ -1,0 +1,20 @@
+@input
+{
+  "page": 1,
+  "size": 30,
+  "loadMore": false
+}
+@output
+{
+  "data": [
+    {
+      "id": 12345,
+	  "name": "abc"
+    }
+  ],
+  "paging": {
+    "count": 210,
+    "page": 1,
+    "size": 30
+  }
+}

@@ -1,0 +1,20 @@
+@input
+{
+  "page": 1,
+  "size": 30,
+  "loadMore": true 
+}
+
+@output
+{
+  "data": [
+    {
+      "id": 12345,
+	  "name": "abc"
+    },
+	{
+      "id": 12346,
+	  "name": "gggh"
+    }
+  ]
+}

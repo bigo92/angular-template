@@ -1,0 +1,22 @@
+@input
+{
+  "page": 1,
+  "size": 30,
+  "loadMore": true,
+  "keySearch": "từ khóa cần tìm",
+  "valueSearch": [1,2,3] or ["a","b","c"] //mảng id cần tìm
+}
+
+@output
+{
+  "data": [
+    {
+      "id": 12345,
+	  "name": "abc"
+    },
+	{
+      "id": 12346,
+	  "name": "gggh"
+    }
+  ]
+}

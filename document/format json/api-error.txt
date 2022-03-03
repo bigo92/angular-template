@@ -1,0 +1,7 @@
+@output status: 500
+{
+  "errors": {
+    "code": ["Đã tồn tại trong hệ thống"],
+	"name": ["Không được chứa ký tự đặc biệt","Không được để trống"]
+  }
+}

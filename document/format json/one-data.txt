@@ -1,0 +1,12 @@
+@input
+{
+  "id": 12345,
+}
+
+@output
+{
+  "data": {
+      "id": 12345,
+	  "name": "abc"
+  }
+}
