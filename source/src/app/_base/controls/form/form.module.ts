@@ -25,6 +25,10 @@ import { InputSelectMultipleApiModule } from '../input-select-multiple-api/input
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @NgModule({
   imports: [
@@ -33,7 +37,11 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
     PagingModule,
     NzSpinModule,
     NzTableModule,
-    NzButtonModule
+    NzButtonModule,
+    NzPageHeaderModule,
+    NzBreadCrumbModule,
+    NzDropDownModule,
+    NzIconModule
     // InputTextModule,
     // InputTextSearchModule,
     // InputNumberModule,
@@ -61,7 +69,11 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
     PagingModule,
     NzSpinModule,
     NzTableModule,
-    NzButtonModule
+    NzButtonModule,
+    NzPageHeaderModule,
+    NzBreadCrumbModule,
+    NzDropDownModule,
+    NzIconModule
     // InputTextModule,
     // InputTextSearchModule,
     // InputNumberModule,
