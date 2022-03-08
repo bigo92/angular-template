@@ -2,6 +2,9 @@
 Template angular v12 using ng-zorro by DK Team 
 
 Getting Started
+0 install nodej tải phiên bản LTS V16.xx
+#https://nodejs.org/en/download/
+
 1 install angular v12 
 # npm i -g @angular/cli@12.2.16
 2 test version
