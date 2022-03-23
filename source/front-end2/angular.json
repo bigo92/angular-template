@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "source": {
+    "font-end": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/source",
+            "outputPath": "dist/main",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -87,10 +87,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "source:build:production"
+              "browserTarget": "font-end:build:production"
             },
             "development": {
-              "browserTarget": "source:build:development"
+              "browserTarget": "font-end:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -122,5 +122,4 @@
       }
     }
   },
-  "defaultProject": "source"
-}
+  "defaultProject": "front-end"

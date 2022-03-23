@@ -1,12 +1,16 @@
 {
-  "name": "source",
+  "name": "front-end",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "node --max_old_space_size=4048 ./node_modules/@angular/cli/bin/ng serve --aot=false",
-    "build": "node --max_old_space_size=4048 ./node_modules/@angular/cli/bin/ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "start": "concurrently -n w: npm:start:*",
+    "start:shell": "ng serve --project=font-end --port 4001 --aot=false",
+    "start:mailbox": "ng serve --project=mailbox --port 4002 --aot=false",
+    "start:calendar": "ng serve --project=calendar --port 4003 --aot=false",
+
+    "build": "concurrently -m 3 -n w: npm:build:*",
+    "build:shell": "ng build --project=font-end",
+    "build:mailbox": "ng build --project=mailbox",
+    "build:calendar": "ng build --project=calendar"
   },
   "private": true,
   "dependencies": {
