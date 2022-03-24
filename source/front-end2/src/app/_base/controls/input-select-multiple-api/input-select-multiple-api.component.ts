@@ -37,7 +37,7 @@ export class InputSelectMultipleApiComponent implements OnInit, OnDestroy, Contr
   @Input() allowClear = true;
   @Input() allowSearch = true;
   @Input() items: any[] = [];
-  @Input() max: number | undefined;
+  @Input() max: number = -1;
   // tslint:disable-next-line:no-output-rename
   @Output('onChange') eventOnChange = new EventEmitter<any>();
   // tslint:disable-next-line:no-output-rename
