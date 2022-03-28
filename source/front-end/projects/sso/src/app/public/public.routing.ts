@@ -5,8 +5,7 @@ const routes: Routes = [
   {
     path: '', component: PublicComponent, children: [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
-      { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
-      { path: 'logout', loadChildren: () => import('./logout/logout.module').then(m => m.LogoutModule) }
+      { path: 'login', loadChildren: () => import('./login/login.module').then(x => x.LoginModule) }
     ]
   },
 ];

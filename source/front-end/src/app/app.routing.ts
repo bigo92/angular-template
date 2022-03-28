@@ -1,8 +1,8 @@
 import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
-  { path: 'dashboard', loadChildren: () => import('dashboard/PublicModule').then(m => m.PublicModule) },
-  { path: 'sso', loadChildren: () => import('sso/PublicModule').then(m => m.PublicModule) }
+  { path: '', loadChildren: () => import('./layout/layout.module').then(m => m.LayoutModule) },
+  { path: 'public', loadChildren: () => import('./public/public.module').then(x => x.PublicModule) }
 ];
 
 export const AppRoutes = RouterModule.forRoot(routes);

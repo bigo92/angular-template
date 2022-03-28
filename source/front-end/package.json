@@ -1,11 +1,12 @@
 {
-  "name": "front-end",
+  "name": "shell",
   "version": "0.0.0",
   "scripts": {
     "start": "concurrently npm:start:*",
-    "start:shell": "ng serve --project=front-end --port 4200",
+    "start:shell": "ng serve --project=shell --port 4200",
     "start:dashboard": "ng serve --project=dashboard --port 4201",
-    "start:sso": "ng serve --project=sso --port 4202"
+    "start:sso": "ng serve --project=sso --port 4202",
+    "start:example": "ng serve --project=example --port 4203"
   },
   "private": true,
   "dependencies": {
@@ -17,15 +18,15 @@
     "@angular/platform-browser": "~12.2.0",
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
-    "ng-zorro-antd": "~12.1.1",
+    "ng-zorro-antd": "^12.1.1",
     "rxjs": "~6.6.0",
-    "tslib": "~2.3.0",
+    "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "~12.1.3",
-    "@angular-devkit/build-angular": "~12.2.0",
-    "@angular/cli": "~12.2.0",
+    "@angular-devkit/build-angular": "~12.2.16",
+    "@angular/cli": "~12.2.16",
     "@angular/compiler-cli": "~12.2.0",
     "@types/jasmine": "~3.8.0",
     "@types/node": "^12.11.1",
