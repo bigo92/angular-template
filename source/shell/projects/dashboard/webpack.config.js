@@ -2,8 +2,8 @@ const { ModuleFederationPlugin } = require('webpack').container;
 
 module.exports = {
   output: {
-    publicPath: "http://localhost:4200/",
-    uniqueName: "shell"
+    publicPath: "http://localhost:4201/",
+    uniqueName: "dashboard"
   },
   optimization: {
     // Only needed to bypass a temporary bug
@@ -11,9 +11,11 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-      remotes: {
-        'dashboard': "dashboard@http://localhost:4201/remoteEntry.js",
-        'sso': "sso@http://localhost:4202/remoteEntry.js",
+      name: "dashboard",
+      library: { type: "var", name: "dashboard" },
+      filename: "remoteEntry.js",
+      exposes: {
+        './PublicModule': './projects/dashboard/src/app/public/public.module.ts',
       },
       shared: ["@angular/core", "@angular/common", "@angular/router"]
     })

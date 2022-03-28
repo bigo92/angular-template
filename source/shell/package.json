@@ -2,11 +2,10 @@
   "name": "shell",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "start": "concurrently npm:start:*",
+    "start:shell": "ng serve --project=shell --port 4200",
+    "start:dashboard": "ng serve --project=dashboard --port 4201",
+    "start:sso": "ng serve --project=sso --port 4202"
   },
   "private": true,
   "dependencies": {
