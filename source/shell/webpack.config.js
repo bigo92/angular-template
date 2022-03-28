@@ -14,6 +14,7 @@ module.exports = {
       remotes: {
         'dashboard': "dashboard@http://localhost:4201/remoteEntry.js",
         'sso': "sso@http://localhost:4202/remoteEntry.js",
+        'example': "example@http://localhost:4203/remoteEntry.js",
       },
       shared: ["@angular/core", "@angular/common", "@angular/router"]
     })

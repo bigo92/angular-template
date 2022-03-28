@@ -5,7 +5,8 @@
     "start": "concurrently npm:start:*",
     "start:shell": "ng serve --project=shell --port 4200",
     "start:dashboard": "ng serve --project=dashboard --port 4201",
-    "start:sso": "ng serve --project=sso --port 4202"
+    "start:sso": "ng serve --project=sso --port 4202",
+    "start:example": "ng serve --project=example --port 4203"
   },
   "private": true,
   "dependencies": {

@@ -1,3 +1,85 @@
-<p>
-  login works!
-</p>
+<!-- Page content -->
+<div class="page-content">
+  <!-- Main content -->
+  <div class="content-wrapper">
+    <!-- Content area -->
+    <div class="content d-flex justify-content-center align-items-center">
+      <!-- Login form -->
+      <form class="login-form wmin-sm-500" asp-route="Login">
+        <input type="hidden" asp-for="ReturnUrl" />
+
+        <div class="card mb-0 bg-login">
+          <div class="card-body">
+            <div class="text-center mb-3">
+              <img
+                class="icon-logo mb-1 mt-1"
+                title="logo login"
+                src="http://localhost:4202/assets/images/logo.png"
+              />
+              <h3 class="title-form-login">HỆ THỐNG XÁC THỰC TÀI KHOẢN</h3>
+            </div>
+
+            <div
+              class="form-group form-group-feedback form-group-feedback-left"
+            >
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Tài khoản"
+                asp-for="Username"
+                autofocus
+              />
+              <div class="form-control-feedback">
+                <i class="icon-user text-muted"></i>
+              </div>
+            </div>
+
+            <div
+              class="form-group form-group-feedback form-group-feedback-left"
+            >
+              <input
+                type="password"
+                class="form-control"
+                placeholder="************"
+                asp-for="Password"
+                autocomplete="off"
+              />
+              <div class="form-control-feedback">
+                <i class="icon-lock2 text-muted"></i>
+              </div>
+            </div>
+
+            <div class="form-group d-flex align-items-center">
+              <div class="form-group">
+                <div class="form-check">
+                  <input class="form-check-input" asp-for="RememberLogin" />
+                  <label class="form-check-label" asp-for="RememberLogin">
+                    Nhớ phiên đăng nhập
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <button
+                type="submit"
+                class="btn btn-primary btn-block"
+                name="button"
+                value="login"
+              >
+                Đăng nhập
+              </button>
+            </div>
+            <div class="text-center">
+              <a asp-action="ForgotPassword" class="ml-auto">Quên mật khẩu?</a>
+            </div>
+          </div>
+        </div>
+      </form>
+      <!-- /login form -->
+    </div>
+    <!-- /content area -->
+  </div>
+  <!-- /main content -->
+</div>
+<!-- /page content -->
