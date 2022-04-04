@@ -1,0 +1,102 @@
+{"properties": [
+  {
+    "name": "spring.batch.console-log",
+    "type": "java.lang.Boolean",
+    "description": "Hiển thị console log hệ thống"
+  },
+  {
+    "name": "api.schedule-setting.select.url",
+    "type": "java.lang.String",
+    "description": "A description for 'api.schedule-setting.select.url'"
+  },
+  {
+    "name": "api.schedule-setting.update.url",
+    "type": "java.lang.String",
+    "description": "A description for 'api.schedule-setting.update.url'"
+  },
+  {
+    "name": "api.sys-param.select.url",
+    "type": "java.lang.String",
+    "description": "A description for 'api.sys-param.select.url'"
+  },
+  {
+    "name": "api.schedule-log.insert.url",
+    "type": "java.lang.String",
+    "description": "A description for 'api.schedule-log.insert.url'"
+  },
+  {
+    "name": "quartz.threadPool.threadCount",
+    "type": "java.lang.String",
+    "description": "A description for 'quartz.threadPool.threadCount'"
+  },
+  {
+    "name": "api.dasboard.server-online",
+    "type": "java.lang.String",
+    "description": "A description for 'api.dasboard.server-online'"
+  },
+  {
+    "name": "api.dasboard.total-task",
+    "type": "java.lang.String",
+    "description": "A description for 'api.dasboard.total-task'"
+  },
+  {
+    "name": "api.dasboard.group-schedule",
+    "type": "java.lang.String",
+    "description": "A description for 'api.dasboard.group-schedule'"
+  },
+  {
+    "name": "api.dasboard.group-schedule-detail",
+    "type": "java.lang.String",
+    "description": "A description for 'api.dasboard.group-schedule-detail'"
+  },
+  {
+    "name": "api.dasboard.schedule-detail",
+    "type": "java.lang.String",
+    "description": "A description for 'api.dasboard.schedule-detail'"
+  },
+  {
+    "name": "api.schedule-log.find.url",
+    "type": "java.lang.String",
+    "description": "A description for 'api.schedule-log.find.url'"
+  },
+  {
+    "name": "api.system.base.url",
+    "type": "java.lang.String",
+    "description": "A description for 'api.system.base.url'"
+  },
+  {
+    "name": "api.schedule-log.select.url",
+    "type": "java.lang.String",
+    "description": "A description for 'api.schedule-log.select.url'"
+  },
+  {
+    "name": "api.system.reset.url",
+    "type": "java.lang.String",
+    "description": "A description for 'api.system.reset.url'"
+  },
+  {
+    "name": "api.sys.login.url",
+    "type": "java.lang.String",
+    "description": "A description for 'api.sys.login.url'"
+  },
+  {
+    "name": "jwt.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.secret'"
+  },
+  {
+    "name": "quartz.log.delete-after-day",
+    "type": "java.lang.Interger",
+    "description": "A description for 'quartz.log.delete-after-day'"
+  },
+  {
+    "name": "quartz.log.delete-skip-file",
+    "type": "java.lang.Boolean",
+    "description": "A description for 'quartz.log.delete-skip-file'"
+  },
+  {
+    "name": "quartz.log.delete-skip-log-has-file",
+    "type": "java.lang.String",
+    "description": "A description for 'quartz.log.delete-skip-log-has-file'"
+  }
+]}

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+
+	<definition name="layout"
+		template="/WEB-INF/_shared/layout/layout-html.jsp">
+		<put-attribute name="navbar"
+			value="/WEB-INF/_shared/navbar/navbar-html.jsp" />
+		<put-attribute name="footer"
+			value="/WEB-INF/_shared/footer/footer-html.jsp" />
+		<put-attribute name="sidebar.html"
+			value="/WEB-INF/_shared/sidebar/sidebar-html.jsp" />
+		<put-attribute name="sidebar.js"
+			value="/WEB-INF/_shared/sidebar/sidebar-js.jsp" />
+		<put-attribute name="layout.js"
+			value="/WEB-INF/_shared/layout/layout-js.jsp" />
+		<put-attribute name="page.html" value="" />  
+		<put-attribute name="page.js" value="" />  
+	</definition>
+
+	<definition name="login"
+		template="/WEB-INF/views/login/login-html.jsp">
+		<put-attribute name="login.js" value="/WEB-INF/views/login/login-js.jsp" />  
+	</definition>
+
+	<definition name="*" extends="layout">
+		<put-attribute name="page.html"
+			value="/WEB-INF/views/{1}/{1}-html.jsp" />
+		<put-attribute name="page.js"
+			value="/WEB-INF/views/{1}/{1}-js.jsp" />
+	</definition>
+	
+	<definition name="*/*" extends="layout">
+		<put-attribute name="page.html"
+			value="/WEB-INF/views/{1}/{2}/{2}-html.jsp" />
+		<put-attribute name="page.js"
+			value="/WEB-INF/views/{1}/{2}/{2}-js.jsp" />
+	</definition>
+	
+	<definition name="*/*/*" extends="layout">
+		<put-attribute name="page.html"
+			value="/WEB-INF/views/{1}/{2}/{3}-html.jsp" />
+		<put-attribute name="page.js"
+			value="/WEB-INF/views/{1}/{2}/{3}-js.jsp" />
+	</definition>
+</tiles-definitions>
