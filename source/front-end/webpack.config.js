@@ -16,7 +16,16 @@ module.exports = {
         'sso': "sso@http://localhost:4202/remoteEntry.js",
         'example': "example@http://localhost:4203/remoteEntry.js",
       },
-      shared: ["@angular/core", "@angular/common", "@angular/router"]
+      shared: {
+        "@angular/core": { singleton: true, strictVersion: true },
+        "@angular/common": { singleton: true, strictVersion: true },
+        "@angular/router": { singleton: true, strictVersion: true },
+        "ng-zorro-antd/modal": { singleton: true, strictVersion: true },
+        "ng-zorro-antd/message": { singleton: true, strictVersion: true },
+        "ng-zorro-antd/notification": { singleton: true, strictVersion: true },
+        "ng-zorro-antd/icon": { singleton: true, strictVersion: true },
+        "@ant-design/icons-angular": { singleton: true, strictVersion: true },
+      }
     })
   ],
 };

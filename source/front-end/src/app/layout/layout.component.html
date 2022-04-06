@@ -1,56 +1,10 @@
-<nz-layout class="app-layout">
-  <nz-sider
-    class="menu-sidebar"
-    nzCollapsible
-    nzWidth="256px"
-    nzBreakpoint="md"
-    [(nzCollapsed)]="isCollapsed"
-    [nzTrigger]="null"
-  >
-    <div class="sidebar-logo">
-      <a routerLink="/">
-        <!-- <img src="~/assets/images/logo.svg" alt="logo" /> -->
-        <h1>DK Team</h1>
-      </a>
-    </div>
-    <ul
-      nz-menu
-      nzTheme="light"
-      nzMode="inline"
-      [nzInlineCollapsed]="isCollapsed"
-    >
-      <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
-        <ul>
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/dasboard/home">Biểu đồ</a>
-          </li>
-        </ul>
-      </li>
-      <li nz-submenu nzTitle="CRUD" nzIcon="form">
-        <ul>
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/example/crud-basic">Basic</a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </nz-sider>
-  <nz-layout>
-    <nz-header>
-      <div class="app-header">
-        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
-          <i
-            class="trigger"
-            nz-icon
-            [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
-          ></i>
-        </span>
-      </div>
-    </nz-header>
-    <nz-content>
-      <div class="inner-content">
+<app-navbar></app-navbar>
+<div class="page-content">
+  <app-menu class="sidebar-light"></app-menu>
+  <div class="content-wrapper">
+    <div class="content-body">
         <router-outlet></router-outlet>
-      </div>
-    </nz-content>
-  </nz-layout>
-</nz-layout>
+    </div>
+    <app-footer></app-footer>
+  </div>
+</div>

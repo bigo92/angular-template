@@ -1,0 +1,96 @@
+app-paging {
+  a {
+    color: black;
+  }
+  .paging-wapper {
+    margin-top: -25px !important;
+    height: 30px;
+  }
+  .temp1 {
+    width: 100%;
+    display: inline-block;
+    .paging-title {
+      float: left;
+    }
+    .paging-size {
+      float: right;
+      margin-right: 10px;
+      line-height: 30px;
+
+      .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+        height: 30px;
+      }
+
+      input-select {
+        width: 70px;
+        width: 70px;
+        float: right;
+        margin-left: 10px;
+      }
+    }
+    .pagination {
+      float: right;
+      .page-item {
+        margin-right: 4px;
+        font-size: 14px;
+
+        &:nth-last-child(1) {
+          margin-right: 0px;
+        }
+
+        .page-link {
+          height: 30px !important;
+          line-height: 30px !important;
+          border: solid 1px #ccc !important;
+          border-radius: 4px !important;
+          color: black;
+          padding: 0px 11px;
+        }
+
+        &.active {
+          .page-link {
+            background: #ce7a58;
+            border-color: #ce7a58 !important;
+            color: white;
+          }
+        }
+
+        &:hover {
+          .page-link {
+            background: #e4a288;
+            border-color: #e4a288 !important;
+            color: white;
+          }
+        }
+
+        &.disabled {
+          .page-link {
+            background: #ccc;
+            border: solid 1px #ccc !important;
+            color: black;
+          }
+        }
+      }
+    }
+  }
+
+  .temp2 {
+    display: inline-block;
+    width: 100%;
+    .jump-page {
+      margin-right: 10px;
+    }
+    .lbl-page {
+      margin-top: 7px;
+      margin-right: 5px;
+    }
+    .in-page {
+      width: 45px;
+      float: left;
+      padding: 7px;
+    }
+    .pagination {
+      float: left;
+    }
+  }
+}

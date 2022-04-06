@@ -10,6 +10,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutes } from './app.routing';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
+import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
 
 registerLocaleData(vi);
 
@@ -22,9 +25,14 @@ registerLocaleData(vi);
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    NzModalModule,
+    NzMessageModule,
+    NzNotificationModule,
     AppRoutes
   ],
-  providers: [{ provide: NZ_I18N, useValue: vi_VN }],
+  providers: [
+    { provide: NZ_I18N, useValue: vi_VN }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

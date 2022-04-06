@@ -17,7 +17,14 @@ module.exports = {
       exposes: {
         './PublicModule': './projects/dashboard/src/app/public/public.module.ts',
       },
-      shared: ["@angular/core", "@angular/common", "@angular/router"]
+      shared: {
+        "@angular/core": { singleton: true, strictVersion: true },
+        "@angular/common": { singleton: true, strictVersion: true },
+        "@angular/router": { singleton: true, strictVersion: true },
+        "ng-zorro-antd/modal": { singleton: true, strictVersion: true },
+        "ng-zorro-antd/message": { singleton: true, strictVersion: true },
+        "ng-zorro-antd/notification": { singleton: true, strictVersion: true }
+      }
     })
   ],
 };
