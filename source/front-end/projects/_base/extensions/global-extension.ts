@@ -4,7 +4,6 @@ import { ErrorsModel, ResponseModel } from '../model/response-model';
 
 
 // dealare
-
 declare global {
   interface String {
     convertToISOTime(this: string): string;

@@ -738,7 +738,7 @@ export class ValidatorExtension {
 
   static gteDateValidator(myForm: FormGroup, controlTarget: string, errorMessage: string) {
     return (control: FormControl) => {
-      const controltaget = myForm.get(controlTarget);
+      const controltaget:any = myForm.get(controlTarget);
       let control1: any = control.value;
       if(typeof control1 === 'string'){
         control1 = new Date(control1);

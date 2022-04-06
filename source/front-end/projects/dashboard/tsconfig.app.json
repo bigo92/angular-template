@@ -10,7 +10,6 @@
     "src/polyfills.ts"
   ],
   "include": [
-    "src/**/*.d.ts",
-    "../_base/extensions/global-extension.ts"
+    "src/**/*.d.ts"
   ]
 }
