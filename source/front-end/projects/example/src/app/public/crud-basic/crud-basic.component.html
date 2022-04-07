@@ -13,38 +13,7 @@
   </div>
 </div>
 
-<div class="page-header page-header-light border-bottom-0">
-  <div class="page-header-content header-elements-md-inline">
-    <div class="page-title d-flex">
-      <h4><span class="font-weight-semibold">Quản lý dữ liệu</span></h4>
-    </div>
-
-    <div class="header-elements">
-      <button type="button" class="btn btn-primary" (click)="getData()">
-        <i class="mr-2 icon-search4"></i>Tìm kiếm
-      </button>
-
-      <button type="button" class="btn btn-primary" (click)="addDataDialog()">
-        <i class="icon-plus-circle2 mr-2"></i>Thêm
-      </button>
-
-      <button
-        type="button"
-        class="btn btn-danger"
-        [disabled]="tableConfig.itemSelected.size === 0"
-        (click)="deleteData(tableConfig.getItemSelectedArray())"
-      >
-        <i class="icon-bin mr-2"></i>Xóa
-      </button>
-
-      <button type="button" class="btn btn-primary">
-        <i class="icon-download mr-2"></i>Kết xuất
-      </button>
-    </div>
-  </div>
-</div>
-
-<div class="content pt-0">
+<div class="content pt-10">
   <div class="header-elements-inline">
     <div class="navbar-expand-md w-100">
       <div class="padding-left-15 text-right d-md-none w-100 row">
@@ -71,7 +40,7 @@
           <div class="row">
             <div class="col-md-3">
               <nz-form-item>
-                <nz-form-label>Tim theo ten</nz-form-label>
+                <nz-form-label>Tìm theo tên</nz-form-label>
                 <nz-form-control [nzErrorTip]="controlErrorTpl">
                   <input-text-search
                     placeholder="Nhập từ khóa tìm kiếm"
@@ -87,98 +56,142 @@
       </div>
     </div>
   </div>
+
+  <div class="hearder-table">
+    <nz-tabset>
+      <nz-tab nzTitle="Danh sách dữ liệu">
+        <ng-template nz-tab [ngTemplateOutlet]="tab1"></ng-template>
+      </nz-tab>
+    </nz-tabset>
+    <div class="btn-search">
+      <nz-button-group>
+        <button type="button" class="btn btn-primary" (click)="getData()">
+          <i class="mr-2 icon-loop3"></i>Làm mới
+        </button>
+      </nz-button-group>
+      <nz-button-group>
+        <button type="button" class="btn btn-primary" (click)="getData()">
+          <i class="mr-2 icon-search4"></i>Tìm kiếm
+        </button>
+        <button type="button" class="btn btn-primary" (click)="getData()">
+          <i class="mr-2 icon-eye-plus"></i>
+        </button>
+      </nz-button-group>
+    </div>
+    <div class="lst-controls">
+      <button type="button" class="btn btn-primary" (click)="addDataDialog()">
+        <i class="icon-plus-circle2 mr-2"></i>Thêm
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-danger"
+        [disabled]="tableConfig.itemSelected.size === 0"
+        (click)="deleteData(tableConfig.getItemSelectedArray())"
+      >
+        <i class="icon-bin mr-2"></i>Xóa
+      </button>
+
+      <button type="button" class="btn btn-primary">
+        <i class="icon-download mr-2"></i>Kết xuất
+      </button>
+    </div>
+  </div>
+
   <hr class="mt-0 margin-bottom-10" />
 
-  <nz-table
-    [nzData]="listOfData"
-    [nzLoading]="isLoading"
-    [nzBordered]="true"
-    [nzFrontPagination]="false"
-    nzSize="small"
-    [nzScroll]="{ x: 'auto' }"
-  >
-    <thead>
-      <tr>
-        <th
-          nzWidth="40px"
-          [nzChecked]="tableConfig.isAllChecked"
-          [nzIndeterminate]="tableConfig.indeterminate"
-          (nzCheckedChange)="tableConfig.onAllChecked($event, listOfData)"
-        ></th>
-        <th>Stt</th>
-        <th>Mã</th>
-        <th>Tên</th>
-        <th>Combobox</th>
-        <th>Date text</th>
-        <th>Date time</th>
-        <th class="action text-center">Thao tác</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of listOfData; let i = index">
-        <td
-          [nzChecked]="tableConfig.itemSelected.has(item[tableConfig.keyId])"
-          (nzCheckedChange)="
-            tableConfig.onItemChecked(
-              item[tableConfig.keyId],
-              $event,
-              listOfData
-            )
-          "
-        ></td>
-        <td>
-          {{ i + 1 + (paging!.page! - 1) * paging!.size! }}
-        </td>
-        <td>
-          {{ item.id }}
-        </td>
-        <td>
-          <a class="data-link" href="javascript:;">
-            {{ item.colText }}
-          </a>
-        </td>
-        <td>
-          {{ item.colSelectSingleName }}
-        </td>
-        <td>
-          {{ item.colDateString }}
-        </td>
-        <td>
-          {{ item.colDateTime }}
-        </td>
-        <td class="text-center">
-          <div class="list-icons list-icons-extended text-center">
-            <a
-              class="list-icons-item"
-              href="javascript:;"
-              (click)="showDataDialog(item.id)"
-            >
-              <span nz-tooltip nzTooltipTitle="Xem">
-                <i nz-icon nzType="eye" nzTheme="outline"></i>
-              </span>
+  <ng-template #tab1>
+    <nz-table
+      [nzData]="listOfData"
+      [nzLoading]="isLoading"
+      [nzBordered]="true"
+      [nzFrontPagination]="false"
+      nzSize="small"
+      [nzScroll]="{ x: 'auto' }"
+    >
+      <thead>
+        <tr>
+          <th
+            nzWidth="40px"
+            [nzChecked]="tableConfig.isAllChecked"
+            [nzIndeterminate]="tableConfig.indeterminate"
+            (nzCheckedChange)="tableConfig.onAllChecked($event, listOfData)"
+          ></th>
+          <th>Stt</th>
+          <th>Mã</th>
+          <th>Tên</th>
+          <th>Combobox</th>
+          <th>Date text</th>
+          <th>Date time</th>
+          <th class="action text-center">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of listOfData; let i = index">
+          <td
+            [nzChecked]="tableConfig.itemSelected.has(item[tableConfig.keyId])"
+            (nzCheckedChange)="
+              tableConfig.onItemChecked(
+                item[tableConfig.keyId],
+                $event,
+                listOfData
+              )
+            "
+          ></td>
+          <td>
+            {{ i + 1 + (paging!.page! - 1) * paging!.size! }}
+          </td>
+          <td>
+            {{ item.id }}
+          </td>
+          <td>
+            <a class="data-link" href="javascript:;">
+              {{ item.colText }}
             </a>
-            <a
-              class="list-icons-item text-primary"
-              href="javascript:;"
-              (click)="editDataDialog(item.id)"
-            >
-              <span nz-tooltip nzTooltipTitle="Sửa">
-                <i nz-icon nzType="form" nzTheme="outline"></i>
-              </span>
-            </a>
-            <a
-              class="list-icons-item text-danger"
-              href="javascript:;"
-              (click)="deleteData([item.id])"
-            >
-              <span nz-tooltip nzTooltipTitle="Xóa">
-                <i nz-icon nzType="delete" nzTheme="outline"></i>
-              </span>
-            </a>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </nz-table>
-  <app-paging [data]="paging" (onChange)="getData($event)"></app-paging>
+          </td>
+          <td>
+            {{ item.colSelectSingleName }}
+          </td>
+          <td>
+            {{ item.colDateString }}
+          </td>
+          <td>
+            {{ item.colDateTime }}
+          </td>
+          <td class="text-center">
+            <div class="list-icons list-icons-extended text-center">
+              <a
+                class="list-icons-item"
+                href="javascript:;"
+                (click)="showDataDialog(item.id)"
+              >
+                <span nz-tooltip nzTooltipTitle="Xem">
+                  <i nz-icon nzType="eye" nzTheme="outline"></i>
+                </span>
+              </a>
+              <a
+                class="list-icons-item text-primary"
+                href="javascript:;"
+                (click)="editDataDialog(item.id)"
+              >
+                <span nz-tooltip nzTooltipTitle="Sửa">
+                  <i nz-icon nzType="form" nzTheme="outline"></i>
+                </span>
+              </a>
+              <a
+                class="list-icons-item text-danger"
+                href="javascript:;"
+                (click)="deleteData([item.id])"
+              >
+                <span nz-tooltip nzTooltipTitle="Xóa">
+                  <i nz-icon nzType="delete" nzTheme="outline"></i>
+                </span>
+              </a>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+    <app-paging [data]="paging" (onChange)="getData($event)"></app-paging>
+  </ng-template>
 </div>

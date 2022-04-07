@@ -8,6 +8,9 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { IconsProviderModule } from "./icons-provider.module";
 import { RenderErrorsModule } from "./render-errors/render-errors.module";
+import { InputTextModule } from "../controls/input-text/input-text.module";
+import { InputTextSearchModule } from "../controls/input-text-search/input-text-search.module";
+import { InputTextareaModule } from "../controls/input-textarea/input-textarea.module";
 
 @NgModule({
   imports: [
@@ -22,11 +25,11 @@ import { RenderErrorsModule } from "./render-errors/render-errors.module";
     NzButtonModule,
     NzTabsModule,
     RenderErrorsModule,
-    // InputTextModule,
-    // InputTextSearchModule,
+    InputTextModule,
+    InputTextSearchModule,
+    InputTextareaModule,
     // InputRadioModule,
     // InputCheckBoxModule,
-    // InputTextareaModule,
     // InputDateModule,
     // InputSelectModule,
     // InputSelectApiModule,
@@ -49,11 +52,11 @@ import { RenderErrorsModule } from "./render-errors/render-errors.module";
     NzButtonModule,
     NzTabsModule,
     RenderErrorsModule,
-    // InputTextModule,
-    // InputTextSearchModule,
+    InputTextModule,
+    InputTextSearchModule,
+    InputTextareaModule,
     // InputRadioModule,
     // InputCheckBoxModule,
-    // InputTextareaModule,
     // InputDateModule,
     // InputSelectModule,
     // InputSelectApiModule,

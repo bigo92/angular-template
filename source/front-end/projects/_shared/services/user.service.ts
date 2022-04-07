@@ -8,7 +8,7 @@ import { SettingService } from './setting.service';
 })
 export class UserService {
 
-  public userInfo: any;
+  public userInfo: any = { userName: 'Admin', fullName: 'Quản trị viên' };
 
   // Observable navItem source
   private _authNavStatusSource = new BehaviorSubject<boolean>(false);
@@ -21,7 +21,7 @@ export class UserService {
 
   public init(): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
-      this.user = { userName: 'admin', fullName:'Admin'};
+      this.user = { userName: 'admin', fullName: 'Admin' };
       this._authNavStatusSource.next(this.isAuthenticated());
       await this.initUserInfo();
       resolve();
@@ -29,6 +29,7 @@ export class UserService {
   }
 
   private async initUserInfo(): Promise<void> {
+    this.userInfo = this.user;
     // if (this.settingService.data.login) {
     //   // check request ignor
     //   if (this.isAuthenticated()) {
@@ -47,7 +48,7 @@ export class UserService {
 
   private getCookie(name: string) {
     const value = `; ${document.cookie}`;
-    const parts:any = value.split(`; ${name}=`);
+    const parts: any = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
   }
 
@@ -60,7 +61,7 @@ export class UserService {
   }
 
   async logout() {
-   // await this.manager.signoutRedirect();
+    // await this.manager.signoutRedirect();
   }
 
   async completeAuthentication() {
