@@ -121,8 +121,28 @@ nz-input-group {
 
 // css global page list
 .hearder-table {
+  position: relative;
   display: flex;
   justify-content: space-between;
+
+  >.ant-tabs-card {
+
+    .ant-tabs-nav::before {
+      border-bottom: 1px solid #fff;
+      z-index: 9999;
+    }
+
+    .ant-tabs-content-holder {
+      position: absolute;
+      top: 42px;
+      width: 100%;
+      border-top: solid 1px #f0f0f0;
+
+      .ant-tabs-content {
+        padding-top: 12px;
+      }
+    }
+  }
 
   nz-tabset {
     flex-basis: auto;
