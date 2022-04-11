@@ -35,19 +35,19 @@ public class SpringMVCConfiguration {
         dataSource.setPassword(env.getProperty("spring.datasource.password"));
         return dataSource;
     }
-//
-//    @Bean("transactionManager")
-//    public DataSourceTransactionManager transactionManager() throws IllegalArgumentException, NamingException {
-//        DataSourceTransactionManager txManager = new DataSourceTransactionManager();
-//
-//        DataSource dataSource = this.dataSource();
-//        txManager.setDataSource(dataSource);
-//
-//        return txManager;
-//    }
 
-//    @Bean("namedParameterJdbcTemplate")
-//    public NamedParameterJdbcTemplate namedParameterJdbcTemplate() throws IllegalArgumentException, NamingException {
-//        return new NamedParameterJdbcTemplate(dataSource());
-//    }
+    @Bean("transactionManager")
+    public DataSourceTransactionManager transactionManager() throws IllegalArgumentException, NamingException {
+        DataSourceTransactionManager txManager = new DataSourceTransactionManager();
+
+        DataSource dataSource = this.dataSource();
+        txManager.setDataSource(dataSource);
+
+        return txManager;
+    }
+
+    @Bean("namedParameterJdbcTemplate")
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate() throws IllegalArgumentException, NamingException {
+        return new NamedParameterJdbcTemplate(dataSource());
+    }
 }

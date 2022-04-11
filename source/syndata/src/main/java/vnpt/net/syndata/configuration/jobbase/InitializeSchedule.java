@@ -24,8 +24,8 @@ public class InitializeSchedule implements Tasklet, InitializingBean {
     @Autowired
     private ScheduleComponent schedule;
 
-    @Autowired
-    private BaseDao baseDao;
+//    @Autowired
+//    private BaseDao baseDao;
 
     @Override
     public void afterPropertiesSet() throws Exception {
