@@ -1,3 +1,4 @@
 {
-    "serverApi": "https://vnpost.ddns.net/kt1"
+  "serverApi": "https://vnpost.ddns.net/kt1",
+  "path": ""
 }

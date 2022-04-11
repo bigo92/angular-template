@@ -17,7 +17,11 @@ module.exports = {
       exposes: {
         './PublicModule': './projects/sso/src/app/public/public.module.ts',
       },
-      shared: ["@angular/core", "@angular/common", "@angular/router"]
+      shared: {
+        "@angular/core": {eager: true, singleton: true},
+        "@angular/common": {eager: true, singleton: true},
+        "@angular/router": {eager: true, singleton: true}
+      }
     })
   ],
 };

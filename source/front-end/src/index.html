@@ -7,11 +7,90 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
+  <!-- doan nay ko nen day vao trong file vi co the load file css cham hon html gay ra loi dom html -->
+  <style>
+    body {
+      margin: 0;
+    }
+
+    .home-loading {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lds-ring {
+      display: inline-block;
+      position: relative;
+      width: 70px;
+      height: 70px;
+    }
+
+    .lds-ring div {
+      box-sizing: border-box;
+      display: block;
+      position: absolute;
+      width: 64px;
+      height: 64px;
+      margin: 2px;
+      border: 3px solid rgb(33 63 153);
+      border-radius: 50%;
+      animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      border-color: rgb(33 63 153) transparent transparent transparent;
+    }
+
+    .lds-ring div:nth-child(1) {
+      animation-delay: -0.45s;
+    }
+
+    .lds-ring div:nth-child(2) {
+      animation-delay: -0.3s;
+    }
+
+    .lds-ring div:nth-child(3) {
+      animation-delay: -0.15s;
+    }
+
+    .text-loading {
+      position: absolute;
+      font-size: 14px;
+      color: rgb(33 63 153);
+      font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    @keyframes lds-ring {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+
+  <!-- import css global -->
   <link rel="stylesheet" href="/assets/bootstrap@4.6.1/bootstrap.min.css">
   <link rel="stylesheet" href="/assets/icons/icomoon/styles.min.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap_limitless.min.css">
+  <link rel="stylesheet" href="/assets/css/layout.min.css">
+  <link rel="stylesheet" href="/assets/css/components.min.css">
+  <link rel="stylesheet" href="/assets/css/colors.min.css">
 </head>
 <body>
-  <app-root></app-root>
+  <app-root>
+    <div class="home-loading">
+      <div class="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="text-loading">Đang tải</div>
+    </div>
+  </app-root>
 
   <script src="/assets/bootstrap@4.6.1/jquery.slim.min.js"></script>
   <script src="/assets/bootstrap@4.6.1/bootstrap.bundle.min.js"></script>

@@ -40,12 +40,11 @@
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "./src/assets/core/scss"
+                "./src/lib-scss"
               ]
             },
             "styles": [
               "src/theme.less",
-              "src/assets/core/scss/base-form.scss",
               "src/styles.scss"
             ],
             "scripts": [],
