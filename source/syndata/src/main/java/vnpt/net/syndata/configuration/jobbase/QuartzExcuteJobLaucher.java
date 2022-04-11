@@ -28,6 +28,7 @@ public class QuartzExcuteJobLaucher extends QuartzJobBean {
     private HttpClientComponent httpClient;
     private Boolean consoleLog;
     private Boolean systemLog;
+    /**/
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {

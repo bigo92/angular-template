@@ -2,6 +2,7 @@ package vnpt.net.syndata.configuration.jobbase;
 
 import java.util.List;
 
+import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -38,37 +39,40 @@ public class QuartzJobLauncher extends QuartzJobBean {
   @Override
   protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
     JobDetail jobDetail = context.getJobDetail();
+    JobDataMap jobDataMap = jobDetail.getJobDataMap();
     try {
       String jobId = jobDetail.getKey().getName();
       String jobDescription = jobDetail.getDescription();
       String jobGroup = jobDetail.getKey().getGroup();
       String triggerCron = context.getTrigger().getDescription();
+      String settingParam = jobDataMap.getString("settingParam");
 
       // lock task
       ResponseEntity<String> resultLock = null;
-      try {
-        resultLock = httpClient.lockTask(jobId);
-      } catch (Exception e) {
-        try {
-          // log error
-          LogError(jobDetail, null, null, "LockTask Error:"+ jobId, e.getLocalizedMessage(), null);
-        } catch (Exception e2) {
-          if (consoleLog) {
-            System.out.println("executeInternal Job Fail: " + e2.getMessage());
-          }
-        }
-      }
-      if (resultLock != null && resultLock.getStatusCode() == HttpStatus.OK) {
-        EJson jsonParam = new EJson(resultLock.getBody());
-        if (jsonParam.getString("MESSAGE").equals("SUCCESS")) {
+//      try {
+//        resultLock = httpClient.lockTask(jobId);
+//      } catch (Exception e) {
+//        try {
+//          // log error
+//          LogError(jobDetail, null, null, "LockTask Error:"+ jobId, e.getLocalizedMessage(), null);
+//        } catch (Exception e2) {
+//          if (consoleLog) {
+//            System.out.println("executeInternal Job Fail: " + e2.getMessage());
+//          }
+//        }
+//      }
 
-          String jobName = jsonParam.getString("SCHEDULE_SETTING_FUNCTION");
-          Long jobRetry = jsonParam.getLong("SCHEDULE_SETTING_RETRY");
-          String jobCron = jsonParam.getString("SCHEDULE_SETTING_CRON");
-          String jobParam = jsonParam.getString("SCHEDULE_SETTING_PARAM");
+      if (resultLock == null) {
+//        EJson jsonParam = new EJson(resultLock.getBody());
+        if (resultLock == null) {
+
+          String jobName = "executeApiJob" ;//jsonParam.getString("SCHEDULE_SETTING_FUNCTION");
+          Long jobRetry = Long.getLong("0");//sonParam.getLong("SCHEDULE_SETTING_RETRY");
+          String jobCron = "0/3 * * * * ?"; //jsonParam.getString("SCHEDULE_SETTING_CRON");
+          String jobParam = settingParam ;//jsonParam.getString("SCHEDULE_SETTING_PARAM");
 
           try {
-            EJson paramJson = new EJson(jobParam);
+            EJson paramJson = new EJson(settingParam);
             if (!triggerCron.equals(jobCron)) {
               // có thay đổi lịch chạy job trên database so với lịch job đăng ký hiện tại
               if (consoleLog) {
@@ -78,7 +82,7 @@ public class QuartzJobLauncher extends QuartzJobBean {
               return;
             }
 
-            JobParameters jobParameters = new JobParametersBuilder().addString("PARAM", jobParam)
+            JobParameters jobParameters = new JobParametersBuilder().addString("PARAM", settingParam)
                 .addString("JOBID", jobId).addString("JOBGROUP", jobGroup).addString("JOBDESCRIPTION", jobDescription)
                 .addString("JOBNAME", jobName).addLong("TIME", System.currentTimeMillis()).toJobParameters();
 

@@ -33,13 +33,16 @@ public class ScheduleComponent {
     @Autowired
     private HttpClientComponent httpClient;
 
+    @Autowired
+    private ScheduleCallApiComponent scheduleCallApiComponent;
+
     @Value("${spring.batch.console-log}")
     private Boolean consoleLog;
 
-    public void addSchedule(String jobId, String jobGroup, String jobDescription, String cronSchedule) throws ClassNotFoundException, SchedulerException {
+    public void addSchedule(String jobId, String jobGroup, String jobDescription, String cronSchedule, String param) throws ClassNotFoundException, SchedulerException {
         if (!scheduler.checkExists(new JobKey(jobId, jobGroup))) {
             // chưa có job được đăng ký => đăng ký job mới
-            JobDetail jobDetail = buildJobDetail(jobId, jobGroup, jobDescription);
+            JobDetail jobDetail = buildJobDetail(jobId, jobGroup, jobDescription, param);
             Trigger trigger = buildJobTrigger(jobDetail, cronSchedule);
             scheduler.scheduleJob(jobDetail, trigger);
         } else {
@@ -48,7 +51,7 @@ public class ScheduleComponent {
             Trigger trigger = scheduler.getTrigger(triggerKey);
             // kiểm tra xem trigger có thay đổi lịch hay không?
             if (!trigger.getDescription().equals(cronSchedule)) {
-                JobDetail jobDetail = buildJobDetail(jobId, jobGroup, jobDescription);
+                JobDetail jobDetail = buildJobDetail(jobId, jobGroup, jobDescription, param);
                 // update job với lịch mới
                 scheduler.rescheduleJob(triggerKey, buildJobTrigger(jobDetail, cronSchedule));
             }
@@ -61,17 +64,21 @@ public class ScheduleComponent {
         }
     }
 
-    private JobDetail buildJobDetail(String jobId, String jobGroup, String jobDescription)
+
+    /*Build job với data*/
+    private JobDetail buildJobDetail(String jobId, String jobGroup, String jobDescription, String param)
             throws ClassNotFoundException {
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put("jobLauncher", jobLauncher);
         jobDataMap.put("jobLocator", jobLocator);
-        jobDataMap.put("httpClient", httpClient);
+//        jobDataMap.put("httpClient", httpClient);
+        jobDataMap.put("settingParam", param);
         jobDataMap.put("consoleLog", consoleLog);
         return JobBuilder.newJob(QuartzJobLauncher.class).withIdentity(jobId, jobGroup).withDescription(jobDescription)
                 .usingJobData(jobDataMap).storeDurably().build();
     }
 
+    /*build job với jobdetail + cron time*/
     private Trigger buildJobTrigger(JobDetail jobDetail, String cronSchedule) {
         return TriggerBuilder.newTrigger().forJob(jobDetail)
                 .withIdentity(jobDetail.getKey().getName(), jobDetail.getKey().getGroup()).withDescription(cronSchedule)

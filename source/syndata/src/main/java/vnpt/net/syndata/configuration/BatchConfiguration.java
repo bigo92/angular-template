@@ -31,10 +31,10 @@ public class BatchConfiguration {
     return stepBuilderFactory.get("initializeScheduleStep").tasklet(initializeScheduleTasklet()).build();
   }
 
+  /*init job*/
   @Bean
   public Job initializeScheduleJob() {
-    return jobBuilderFactory.get("initializeScheduleJob").incrementer(new RunIdIncrementer())
-        .flow(initializeScheduleStep()).end().build();
+    return jobBuilderFactory.get("initializeScheduleJob").incrementer(new RunIdIncrementer()).flow(initializeScheduleStep()).end().build();
   }
 
   @Bean
@@ -42,79 +42,25 @@ public class BatchConfiguration {
     InitializeSchedule taslet = new InitializeSchedule();
     return taslet;
   }
+//
+//  // ----------------- clearTrashScheduleJob---------------------giu
+//  @Bean
+//  public Step clearTrashScheduleStep() {
+//    return stepBuilderFactory.get("clearTrashScheduleStep").tasklet(clearTrashScheduleTasklet()).build();
+//  }
+//
+//  @Bean
+//  public Job clearTrashScheduleJob() {
+//    return jobBuilderFactory.get("clearTrashScheduleJob").incrementer(new RunIdIncrementer())
+//        .flow(clearTrashScheduleStep()).end().build();
+//  }
+//
+//  @Bean
+//  public Tasklet clearTrashScheduleTasklet() {
+//    ClearTrashSchedule taslet = new ClearTrashSchedule();
+//    return taslet;
+//  }
 
-  // ----------------- clearTrashScheduleJob---------------------giu
-  @Bean
-  public Step clearTrashScheduleStep() {
-    return stepBuilderFactory.get("clearTrashScheduleStep").tasklet(clearTrashScheduleTasklet()).build();
-  }
-
-  @Bean
-  public Job clearTrashScheduleJob() {
-    return jobBuilderFactory.get("clearTrashScheduleJob").incrementer(new RunIdIncrementer())
-        .flow(clearTrashScheduleStep()).end().build();
-  }
-
-  @Bean
-  public Tasklet clearTrashScheduleTasklet() {
-    ClearTrashSchedule taslet = new ClearTrashSchedule();
-    return taslet;
-  }
-
-  // -----------------------------------------------------------------
-  // ----------------- Job Tạo file từ api ---------------------------delete
-  @Bean
-  public Step createFileStep() {
-    return stepBuilderFactory.get("createFileStep").tasklet(createFileTasklet()).build();
-  }
-
-  @Bean
-  public Job createFileJob() {
-    return jobBuilderFactory.get("createFileJob").incrementer(new RunIdIncrementer()).flow(createFileStep())
-        .end().build();
-  }
-
-  @Bean
-  public Tasklet createFileTasklet() {
-    CreateFileJob tasklet = new CreateFileJob();
-    return tasklet;
-  }
-  // -----------------------------------------------------------------------------------------------
-  // --- Job đọc file và gọi api (cấu hình outFile sẽ tạo file,không cấu hình thì ko tạo file) -------
-  @Bean
-  public Step receiveFileStep() {
-    return stepBuilderFactory.get("receiveFileStep").tasklet(receiveFileTasklet()).build();
-  }
-
-  @Bean
-  public Job receiveFileJob() {
-    return jobBuilderFactory.get("receiveFileJob").incrementer(new RunIdIncrementer())
-        .flow(receiveFileStep()).end().build();
-  }
-
-  @Bean
-  public Tasklet receiveFileTasklet() {
-    ReceiveFileJob tasklet = new ReceiveFileJob();
-    return tasklet;
-  }
-  // -----------------------------------------------------------------
-  // ---------------- Job đọc api đầu vào và api đầu ra --------------
-  @Bean
-  public Step synDataStep() {
-    return stepBuilderFactory.get("synDataStep").tasklet(synDataTasklet()).build();
-  }
-
-  @Bean
-  public Job synDataJob() {
-    return jobBuilderFactory.get("synDataJob").incrementer(new RunIdIncrementer())
-        .flow(synDataStep()).end().build();
-  }
-
-  @Bean
-  public Tasklet synDataTasklet() {
-    SynDataJob tasklet = new SynDataJob();
-    return tasklet;
-  }
   // -----------------------------------------------------------------
    // ---------------- Job gọi 1 api đặt lịch --------------
    @Bean

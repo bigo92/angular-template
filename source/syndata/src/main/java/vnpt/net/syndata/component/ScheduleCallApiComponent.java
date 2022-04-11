@@ -1,39 +1,33 @@
-package vnpt.net.syndata.job;
-
-import java.util.Map;
+package vnpt.net.syndata.component;
 
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
-import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import vnpt.net.syndata.component.HttpClientComponent;
+import org.springframework.stereotype.Component;
 import vnpt.net.syndata.utils.EJson;
 
-public class ExecuteApiJob implements Tasklet, InitializingBean {
+import java.util.Map;
 
+@Component
+public class ScheduleCallApiComponent {
     @Autowired
     private HttpClientComponent httpClient;
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-    }
-
-    @Override
+    private String param;
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        final Map<String, Object> prameter = chunkContext.getStepContext().getJobParameters();
+//        final Map<String, Object> prameter = chunkContext.getStepContext().getJobParameters();
+//        String param = "{\"API\":\"http://localhost:8080/public/example-api-one\",\"METHOD\":\"POST\",\"PARAMS\":{\"KEY_OBJ1\":1,\"KEY_OBJ2\":2},\"HTTPHEADERS\":{\"Content-Type\":\"application/json\",\"Cookie\":\"JSESSIONID=00D11F1F8CFC83B7A339B4498AF43DC4\"}}";
+
         try {
             // lấy tham số
-            final EJson paramJson = new EJson(prameter.get("PARAM").toString());
+            final EJson paramJson = new EJson(param);
             final String urlApi = paramJson.getString("API");
             final String method = paramJson.getString("METHOD");
-            EJson params = paramJson.getJSONObject("PARAMS");
-            final EJson apiParam = paramJson.getJSONObject("PARAMS");
-            final EJson headerParam =  paramJson.getJSONObject("HTTPHEADERS");
+            final EJson apiParam = paramJson.getJSONObject("PARAMS");;
+            final EJson headerParam = paramJson.getJSONObject("HTTPHEADERS");
 
             // excute api
             switch (method) {
@@ -43,8 +37,6 @@ public class ExecuteApiJob implements Tasklet, InitializingBean {
                         // return data
                         EJson resultLog = new EJson();
                         resultLog.put("STATUS", "SUCCESS");
-                        contribution.getStepExecution().getExecutionContext().put("RESULT", resultLog.jsonString());
-                        contribution.getStepExecution().getExecutionContext().put("CONTENT", resultJsonIn.getBody());
                     }
                     break;
                 case "POST":
@@ -53,8 +45,6 @@ public class ExecuteApiJob implements Tasklet, InitializingBean {
                         // return data
                         EJson resultLog = new EJson();
                         resultLog.put("STATUS", "SUCCESS");
-                        contribution.getStepExecution().getExecutionContext().put("RESULT", resultLog.jsonString());
-                        contribution.getStepExecution().getExecutionContext().put("CONTENT", resultJsonIn.getBody());
                     }
                     break;
                 case "PUT":
@@ -63,8 +53,6 @@ public class ExecuteApiJob implements Tasklet, InitializingBean {
                         // return data
                         EJson resultLog = new EJson();
                         resultLog.put("STATUS", "SUCCESS");
-                        contribution.getStepExecution().getExecutionContext().put("RESULT", resultLog.jsonString());
-                        contribution.getStepExecution().getExecutionContext().put("CONTENT", resultJsonIn.getBody());
                     }
                     break;
             }
@@ -73,5 +61,4 @@ public class ExecuteApiJob implements Tasklet, InitializingBean {
         }
         return RepeatStatus.FINISHED;
     }
-
 }
