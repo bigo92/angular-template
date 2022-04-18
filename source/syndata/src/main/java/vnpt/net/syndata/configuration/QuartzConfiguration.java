@@ -56,7 +56,7 @@ public class QuartzConfiguration {
         map.put("jobLauncher", jobLauncher);
         map.put("jobLocator", jobLocator);
 //        map.put("httpClient", httpClient);
-        map.put("consoleLog", consoleLog);
+//        map.put("consoleLog", consoleLog);
         // khởi tạo schedule sẽ không log lên database do job initializeSchedule là job
         // base không khai báo trong schedule-setting
         map.put("systemLog", false);

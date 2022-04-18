@@ -3,6 +3,7 @@ package vnpt.net.syndata.controller;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,10 +17,12 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
-@RequestMapping("/public")
+//@RequestMapping("/public")
 public class APIExampleController {
     @Autowired
     BaseDao baseDao;
@@ -31,12 +34,10 @@ public class APIExampleController {
         JsonParser jsonParser = new JsonParser();
         JsonObject paramObj = new JsonObject();
         paramObj = jsonParser.parse(jsonParam).getAsJsonObject();
-        List listSchedule = baseDao.testfunction("");
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         System.out.println(dtf.format(now));
-        System.out.println(listSchedule);
         return dtf.format(now);
     }
 }

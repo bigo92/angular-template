@@ -13,10 +13,15 @@ import org.quartz.TriggerKey;
 import org.springframework.batch.core.configuration.JobLocator;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import vnpt.net.syndata.configuration.SpringMVCConfiguration;
 import vnpt.net.syndata.configuration.jobbase.QuartzJobLauncher;
+import vnpt.net.syndata.dao.BaseDao;
 
 @Component
 public class ScheduleComponent {
@@ -33,16 +38,16 @@ public class ScheduleComponent {
     @Autowired
     private HttpClientComponent httpClient;
 
-    @Autowired
-    private ScheduleCallApiComponent scheduleCallApiComponent;
-
     @Value("${spring.batch.console-log}")
     private Boolean consoleLog;
 
-    public void addSchedule(String jobId, String jobGroup, String jobDescription, String cronSchedule, String param) throws ClassNotFoundException, SchedulerException {
+    @Value("${api.system.dothing}")
+    private String urlDothing;
+
+    public void addSchedule(String jobId, String jobGroup, String jobDescription, String cronSchedule, boolean isSingle) throws ClassNotFoundException, SchedulerException {
         if (!scheduler.checkExists(new JobKey(jobId, jobGroup))) {
             // chưa có job được đăng ký => đăng ký job mới
-            JobDetail jobDetail = buildJobDetail(jobId, jobGroup, jobDescription, param);
+            JobDetail jobDetail = buildJobDetail(jobId, jobGroup, jobDescription, isSingle);
             Trigger trigger = buildJobTrigger(jobDetail, cronSchedule);
             scheduler.scheduleJob(jobDetail, trigger);
         } else {
@@ -51,7 +56,7 @@ public class ScheduleComponent {
             Trigger trigger = scheduler.getTrigger(triggerKey);
             // kiểm tra xem trigger có thay đổi lịch hay không?
             if (!trigger.getDescription().equals(cronSchedule)) {
-                JobDetail jobDetail = buildJobDetail(jobId, jobGroup, jobDescription, param);
+                JobDetail jobDetail = buildJobDetail(jobId, jobGroup, jobDescription, isSingle);
                 // update job với lịch mới
                 scheduler.rescheduleJob(triggerKey, buildJobTrigger(jobDetail, cronSchedule));
             }
@@ -66,14 +71,16 @@ public class ScheduleComponent {
 
 
     /*Build job với data*/
-    private JobDetail buildJobDetail(String jobId, String jobGroup, String jobDescription, String param)
+    private JobDetail buildJobDetail(String jobId, String jobGroup, String jobDescription, boolean isSingle)
             throws ClassNotFoundException {
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put("jobLauncher", jobLauncher);
         jobDataMap.put("jobLocator", jobLocator);
-//        jobDataMap.put("httpClient", httpClient);
-        jobDataMap.put("settingParam", param);
+        jobDataMap.put("httpClient", httpClient);
+        jobDataMap.put("urlDothing", urlDothing);
+        jobDataMap.put("isSingle", isSingle);
         jobDataMap.put("consoleLog", consoleLog);
+
         return JobBuilder.newJob(QuartzJobLauncher.class).withIdentity(jobId, jobGroup).withDescription(jobDescription)
                 .usingJobData(jobDataMap).storeDurably().build();
     }
