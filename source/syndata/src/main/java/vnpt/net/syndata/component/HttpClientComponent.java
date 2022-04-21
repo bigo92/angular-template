@@ -33,6 +33,32 @@ public class HttpClientComponent {
     @Value("${api.sys-param.select.url}")
     private String urlSysPara;
 
+    public ResponseEntity<String> getApi(String url, EJson param, EJson header) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        if(header != null){
+            Iterator<String> keys = header.jsonObject().keySet().iterator();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                headers.add(key, header.getString(key));
+            }
+        }
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+        if (param != null) {
+            Iterator<String> keys = param.jsonObject().keySet().iterator();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                builder.queryParam(key, param.getString(key));
+            }
+        }
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> result = restTemplate.exchange(builder.build().encode().toUri(), HttpMethod.GET, entity,
+                String.class);
+        return result;
+    }
+
     public ResponseEntity<String> getDataByApi(String url, String data) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
