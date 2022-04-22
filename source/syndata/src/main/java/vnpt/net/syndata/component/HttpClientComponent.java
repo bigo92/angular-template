@@ -105,9 +105,8 @@ public class HttpClientComponent {
                 headers.add(key, headerParam.getString(key));
             }
         }
-        EJson dataParam = new EJson();
-        dataParam.put("data", data);
-        HttpEntity<String> entity = new HttpEntity<String>(dataParam.jsonString(), headers);
+
+        HttpEntity<String> entity = new HttpEntity<String>(data, headers);
         ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
         return result;
     }
