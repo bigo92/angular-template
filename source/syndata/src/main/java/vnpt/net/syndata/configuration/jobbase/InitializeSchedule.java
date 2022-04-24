@@ -70,7 +70,6 @@ public class InitializeSchedule implements Tasklet, InitializingBean {
                     String jobGroup = item.getOrDefault("JOB_GROUP", "").toString();
                     String jobDescription = item.getOrDefault("NAME_JOB", "").toString();
                     String cronSchedule = item.getOrDefault("TIME_CROSS", "").toString();
-                    String paramJob = item.getOrDefault("JSON_PARAM", "").toString();
                     boolean isSingle = Utils.getTypeRun(Integer.parseInt(item.getOrDefault("TYPE_RUN", "0").toString()));
                     schedule.addSchedule(jobId, jobGroup, jobDescription, cronSchedule, isSingle);
                 }

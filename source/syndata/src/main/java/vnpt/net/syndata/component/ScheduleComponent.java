@@ -44,6 +44,9 @@ public class ScheduleComponent {
     @Value("${api.system.dothing}")
     private String urlDothing;
 
+    @Value("${api.system.getjob}")
+    private String urlGetJob;
+
     public void addSchedule(String jobId, String jobGroup, String jobDescription, String cronSchedule, boolean isSingle) throws ClassNotFoundException, SchedulerException {
         if (!scheduler.checkExists(new JobKey(jobId, jobGroup))) {
             // chưa có job được đăng ký => đăng ký job mới
@@ -78,6 +81,7 @@ public class ScheduleComponent {
         jobDataMap.put("jobLocator", jobLocator);
         jobDataMap.put("httpClient", httpClient);
         jobDataMap.put("urlDothing", urlDothing);
+        jobDataMap.put("urlGetJob", urlGetJob);
         jobDataMap.put("isSingle", isSingle);
         jobDataMap.put("consoleLog", consoleLog);
 

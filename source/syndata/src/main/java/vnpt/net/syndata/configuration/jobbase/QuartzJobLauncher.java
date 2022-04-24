@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -21,16 +22,11 @@ import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import vnpt.net.syndata.component.HttpClientComponent;
-import vnpt.net.syndata.configuration.SpringMVCConfiguration;
-import vnpt.net.syndata.dao.BaseDao;
 import vnpt.net.syndata.utils.EJson;
 import vnpt.net.syndata.utils.Utils;
 
@@ -45,6 +41,7 @@ public class QuartzJobLauncher extends QuartzJobBean {
   private HttpClientComponent httpClient;
   private Boolean consoleLog;
   private String urlDothing;
+  private String urlGetJob;
 
   @Override
   protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
@@ -59,73 +56,87 @@ public class QuartzJobLauncher extends QuartzJobBean {
 
       // lock task insert vào bảng processing singal hay muilti
       //select  ra check time, ok => run job 0k => insert log xong => xóa trong process đi
-      String transactionId = Utils.createUUID();
+//      String transactionId = Utils.createUUID();
 
       //check type job single hay multi
 
-      ResponseEntity<String> resultLock = null;
-      HttpStatus statusCode = null;
       EJson jsonParam = new EJson();
       jsonParam.put("typeJob", isJobSingle);
       jsonParam.put("settingId", jobId);
-      jsonParam.put("transactionId", transactionId);
       jsonParam.put("serverIP", "");
       jsonParam.put("isLast", 1);
 
       /*Đăng ký job*/
+      int errorCode = 0;
       int retry = 2;
       boolean success = false;
+      String transactionId = "";
       do {
         try {
           jsonParam.put("action", Utils.ACTION_ADD);
           ResponseEntity<String> response = httpClient.postDataByApi(urlDothing, null, jsonParam.jsonString());
-          statusCode = response.getStatusCode();
+          EJson jsonResult = new EJson(response.getBody());
+          transactionId = jsonResult.getString("transactionId");
+          errorCode = jsonResult.getLong("errorCode").intValue();
           success = true;
         } catch (Exception e) {
           retry--;
           success = false;
           if (retry == 0){
-            statusCode = HttpStatus.SEE_OTHER;
+            errorCode = -1;
             success = true;
           }
           System.out.println(e);
         }
       }while (!success);
 
+      if (errorCode == 0) {
+        int retryGetJob = 2;
+        boolean successGet = false;
+        String dataJob = "";
+        do {
+          try {
+            Map<String, Object> mapParam =  new HashMap<>();
+            mapParam.put("transactionId", transactionId);
+            ResponseEntity<String> response = httpClient.getDataByApiQueryParam(urlGetJob, mapParam);
+            dataJob = response.getBody();
+            successGet = true;
+          } catch (Exception e) {
+            retryGetJob--;
+            successGet = false;
+            if (retryGetJob == 0){
+              successGet = true;
+            }
+            System.out.println(e);
+          }
+        }while (!successGet);
 
-
-      if (statusCode == HttpStatus.OK) {
-        jsonParam.put("action", Utils.ACTION_SEL);
-
-
-        Map<String, Object> jobInfo = new HashMap<>(); //baseDao.getScheduleProcessing(transactionId);
-        if (jobInfo.isEmpty()){
+        EJson jobInfo = new EJson(dataJob);
+        if (jobInfo.getBoolean("isEmpty")){
           System.out.println("Job không đăng ký được lịch trình!");
           return;
         }
 
-          String jobName = jobInfo.get("NAME_JOB").toString();//jsonParam.getString("SCHEDULE_SETTING_FUNCTION");
-          Long jobRetry = Long.getLong("0");//sonParam.getLong("SCHEDULE_SETTING_RETRY");
-          String jobCron = jobInfo.get("TIME_CROSS").toString(); //jsonParam.getString("SCHEDULE_SETTING_CRON");
-          String jobParam = jobInfo.get("JSON_PARAM").toString() ;//jsonParam.getString("SCHEDULE_SETTING_PARAM");
+        String jobName = jobInfo.getString("NAME_JOB");//jsonParam.getString("SCHEDULE_SETTING_FUNCTION");
+        Long jobRetry = Long.getLong("0");//sonParam.getLong("SCHEDULE_SETTING_RETRY");
+        String jobCron = jobInfo.getString("TIME_CROSS"); //jsonParam.getString("SCHEDULE_SETTING_CRON");
+        String jobParam = jobInfo.getString("JSON_PARAM");//jsonParam.getString("SCHEDULE_SETTING_PARAM");
 
           try {
             EJson paramJson = new EJson(jobParam);
             if (!triggerCron.equals(jobCron)) {
               // có thay đổi lịch chạy job trên database so với lịch job đăng ký hiện tại
               if (consoleLog) {
-                System.out
-                    .println("Job fail: có thay đổi lịch chạy job trên database so với lịch job đăng ký hiện tại");
+                System.out.println("Job fail: có thay đổi lịch chạy job trên database so với lịch job đăng ký hiện tại");
               }
               return;
             }
-            String param = "{\"KEY_OBJ1\":1,\"KEY_OBJ2\":2}";
 
-            JobParameters jobParameters = new JobParametersBuilder().addString("PARAM", "")
+            JobParameters jobParameters = new JobParametersBuilder().addString("PARAM", jobParam)
                 .addString("JOBID", jobId).addString("JOBGROUP", jobGroup).addString("JOBDESCRIPTION", jobDescription)
                 .addString("JOBNAME", jobName).addLong("TIME", System.currentTimeMillis()).toJobParameters();
 
-            Job job = jobLocator.getJob(jobName);
+            Job job = jobLocator.getJob("executeApiJob");
             JobExecution jobExecution = jobLauncher.run(job, jobParameters);
 
             StepExecution stepExecution = jobExecution.getStepExecutions().iterator().next();
@@ -165,9 +176,12 @@ public class QuartzJobLauncher extends QuartzJobBean {
             }
           } finally {
             // unlock task
-//            httpClient.unLockTask(jobId);
-            int del = 1;
-            if (del > 0) {
+            EJson jsonDel = new EJson();
+            jsonDel.put("action", Utils.ACTION_DEL);
+            jsonDel.put("transactionId", transactionId);
+            ResponseEntity<String> response = httpClient.postDataByApi(urlDothing, null, jsonDel.jsonString());
+            EJson resultDel = new EJson(response.getBody());
+            if (resultDel.getLong("errorCode").intValue() > 0) {
               System.out.println("unlockTask:" + transactionId);
             }
           }
@@ -241,5 +255,13 @@ public class QuartzJobLauncher extends QuartzJobBean {
 
   public void setUrlDothing(String urlDothing) {
     this.urlDothing = urlDothing;
+  }
+
+  public String getUrlGetJob() {
+    return urlGetJob;
+  }
+
+  public void setUrlGetJob(String urlGetJob) {
+    this.urlGetJob = urlGetJob;
   }
 }

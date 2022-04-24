@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-//@RequestMapping("/public")
+@RequestMapping("/public")
 public class APIExampleController {
     @Autowired
     BaseDao baseDao;

@@ -5,6 +5,8 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -44,6 +46,21 @@ public class HttpClientComponent {
         HttpEntity<?> entity = new HttpEntity<>(headers);
         ResponseEntity<String> result = restTemplate.exchange(builder.build().encode().toUri(), HttpMethod.GET, entity,
                 String.class);
+        return result;
+    }
+
+    public ResponseEntity<String> getDataByApiQueryParam(String url, Map<String, Object> data) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+        if (data != null) {
+            for (Map.Entry<String, Object> entry : data.entrySet() ) {
+                builder.queryParam(entry.getKey(), entry.getValue());
+            }
+        }
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> result = restTemplate.exchange(builder.build().encode().toUri(), HttpMethod.GET, entity, String.class);
         return result;
     }
 
