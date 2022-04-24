@@ -1,5 +1,18 @@
 package vnpt.net.syndata.utils;
 
+import com.google.gson.JsonElement;
+import org.apache.commons.lang3.StringUtils;
+
+import java.security.MessageDigest;
+import java.text.DateFormat;
+import java.text.Normalizer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.regex.Pattern;
+
 import vnpt.net.syndata.configuration.CustomException;
 
 import java.net.InetAddress;
@@ -34,5 +47,12 @@ public class Utils {
             return true;
         }
         return false;
+    }
+
+    public static LocalDateTime convertToLocalDate(Date dateToConvert) {
+        if (dateToConvert == null) return null;
+        return dateToConvert.toInstant()
+          .atZone(ZoneId.systemDefault())
+          .toLocalDateTime();
     }
 }
