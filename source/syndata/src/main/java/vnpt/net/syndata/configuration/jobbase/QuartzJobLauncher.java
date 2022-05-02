@@ -93,7 +93,7 @@ public class QuartzJobLauncher extends QuartzJobBean {
         }
       }while (!success);
 
-      if (errorCode == 0) {
+      if (errorCode > 0) {
         int retryGetJob = 2;
         boolean successGet = false;
         String dataJob = "";
@@ -162,6 +162,7 @@ public class QuartzJobLauncher extends QuartzJobBean {
               infoJob.put("transactionId", transactionId);
               infoJob.put("paramJob", jobParam);
               infoJob.put("logMessage", resultJob);
+              infoJob.put("bodyContent", resultBody.toString());
               ResponseEntity<String> resLogJob = httpClient.postDataByApi(urlAddLog, null, infoJob.jsonString());
             } else {
               Throwable throwable = failureExceptions.get(0);
@@ -172,7 +173,6 @@ public class QuartzJobLauncher extends QuartzJobBean {
                   // update param nếu trường hợp lỗi có đánh dấu result trả về
                   // Cụ thể các trường hợp sử lý file cần đánh giấu đang lỗi ở file nào.
                   // hệ thống retry sẽ tiếp tục sử lý từ file lỗi đó
-                  jobParam = resultJob;
                 }
               }
               infoJob.put("success", false);

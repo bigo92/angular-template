@@ -156,15 +156,15 @@ public class BaseDao extends SpringMVCConfiguration {
 
     @Transactional("transactionManager")
     public int addLogSuccess(String transactionId, long jobId, String jobName, String jobGroup, String jobDescription, String ipServer,
-                           String jsonParam, String successMessage){
+                           String jsonParam, String successMessage, String bodyContent){
         String sql = "INSERT INTO LOG_SUCCESS_PROCESS                            " +
                 "  (TRANSACTION_ID,         JOB_ID,                 JOB_NAME,    " +
                 "   JOB_GROUP,              JOB_DESCRIPTION,        IP_SERVER,   " +
-                "   JSON_PARAM,             LOG_MESSAGE)                         " +
+                "   JSON_PARAM,             SUCCESS_MESSAGE,        BODY_CONTENT)" +
                 "VALUES                                                          " +
                 "  (:transactionId,         :jobId,                 :jobName,    " +
                 "   :jobGroup,              :jobDescription,        :ipServer,   " +
-                "   :jsonParam,             :logMessage)";
+                "   :jsonParam,             :logMessage,            :bodyContent)";
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("transactionId", transactionId);
         parameterSource.addValue("jobId", jobId);
@@ -174,6 +174,7 @@ public class BaseDao extends SpringMVCConfiguration {
         parameterSource.addValue("ipServer", ipServer);
         parameterSource.addValue("jsonParam", jsonParam);
         parameterSource.addValue("logMessage", successMessage);
+        parameterSource.addValue("bodyContent", bodyContent);
         try{
             return namedParameterJdbcTemplate.update(sql, parameterSource);
         }catch (Exception e){
