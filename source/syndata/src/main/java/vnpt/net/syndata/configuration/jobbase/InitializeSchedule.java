@@ -46,12 +46,6 @@ public class InitializeSchedule implements Tasklet, InitializingBean {
         }
 
 //        // Gọi lên server thông báo là hệ thống vẫn đang online
-//        ResponseEntity<String> resultOnline = httpClient.online();
-//        if (resultOnline.getStatusCode() == HttpStatus.OK) {
-//            if (consoleLog) {
-//                System.out.println("connect online server: SUCCESS");
-//            }
-//        }
 //        resultOnline = null;
 
         // load congfig api
