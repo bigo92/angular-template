@@ -42,6 +42,7 @@ public class QuartzJobLauncher extends QuartzJobBean {
   private Boolean consoleLog;
   private String urlDothing;
   private String urlGetJob;
+  private String urlAddLog;
 
   @Override
   protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
@@ -60,21 +61,23 @@ public class QuartzJobLauncher extends QuartzJobBean {
 
       //check type job single hay multi
 
-      EJson jsonParam = new EJson();
-      jsonParam.put("typeJob", isJobSingle);
-      jsonParam.put("settingId", jobId);
-      jsonParam.put("serverIP", "");
-      jsonParam.put("isLast", 1);
+      EJson infoJob = new EJson();
+      infoJob.put("typeJob", isJobSingle);
+      infoJob.put("settingId", jobId);
+      infoJob.put("serverIP", "");
+      infoJob.put("isLast", 1);
+      infoJob.put("jobName", jobDescription);
+      infoJob.put("jobGroup", jobGroup);
 
       /*Đăng ký job*/
       int errorCode = 0;
       int retry = 2;
       boolean success = false;
-      String transactionId = "";
+      String transactionId = null;
       do {
         try {
-          jsonParam.put("action", Utils.ACTION_ADD);
-          ResponseEntity<String> response = httpClient.postDataByApi(urlDothing, null, jsonParam.jsonString());
+          infoJob.put("action", Utils.ACTION_ADD);
+          ResponseEntity<String> response = httpClient.postDataByApi(urlDothing, null, infoJob.jsonString());
           EJson jsonResult = new EJson(response.getBody());
           transactionId = jsonResult.getString("transactionId");
           errorCode = jsonResult.getLong("errorCode").intValue();
@@ -113,6 +116,11 @@ public class QuartzJobLauncher extends QuartzJobBean {
 
         EJson jobInfo = new EJson(dataJob);
         if (jobInfo.getBoolean("isEmpty")){
+          infoJob.put("success", false);
+          infoJob.put("transactionId", transactionId);
+          infoJob.put("paramJob", null);
+          infoJob.put("logMessage", "Job không đăng ký được lịch trình!");
+          ResponseEntity<String> resLogJob = httpClient.postDataByApi(urlAddLog, null, infoJob.jsonString());
           System.out.println("Job không đăng ký được lịch trình!");
           return;
         }
@@ -127,6 +135,11 @@ public class QuartzJobLauncher extends QuartzJobBean {
             if (!triggerCron.equals(jobCron)) {
               // có thay đổi lịch chạy job trên database so với lịch job đăng ký hiện tại
               if (consoleLog) {
+                infoJob.put("success", false);
+                infoJob.put("transactionId", transactionId);
+                infoJob.put("paramJob", null);
+                infoJob.put("logMessage", "Job fail: có thay đổi lịch chạy job trên database so với lịch job đăng ký hiện tại");
+                ResponseEntity<String> resLogJob = httpClient.postDataByApi(urlAddLog, null, infoJob.jsonString());
                 System.out.println("Job fail: có thay đổi lịch chạy job trên database so với lịch job đăng ký hiện tại");
               }
               return;
@@ -142,13 +155,17 @@ public class QuartzJobLauncher extends QuartzJobBean {
             StepExecution stepExecution = jobExecution.getStepExecutions().iterator().next();
             List<Throwable> failureExceptions = stepExecution.getFailureExceptions();
             if (failureExceptions.isEmpty()) {
-              // loc success
+              /*Log success*/
               String resultJob = stepExecution.getExecutionContext().getString("RESULT");
               final Object resultBody = stepExecution.getExecutionContext().get("CONTENT");
-              LogSuccess(jobId, paramJson, new EJson(resultJob), resultBody != null ? (String) resultBody : null);
+              infoJob.put("success", true);
+              infoJob.put("transactionId", transactionId);
+              infoJob.put("paramJob", jobParam);
+              infoJob.put("logMessage", resultJob);
+              ResponseEntity<String> resLogJob = httpClient.postDataByApi(urlAddLog, null, infoJob.jsonString());
             } else {
               Throwable throwable = failureExceptions.get(0);
-              // log error
+              /*log error*/
               if (stepExecution.getExecutionContext().get("RESULT") != null) {
                 String resultJob = stepExecution.getExecutionContext().getString("RESULT");
                 if (resultJob != null) {
@@ -158,7 +175,11 @@ public class QuartzJobLauncher extends QuartzJobBean {
                   jobParam = resultJob;
                 }
               }
-              LogError(jobDetail, jobName, jobParam, throwable.getMessage(), throwable.getLocalizedMessage(), jobRetry);
+              infoJob.put("success", false);
+              infoJob.put("transactionId", transactionId);
+              infoJob.put("paramJob", null);
+              infoJob.put("logMessage", throwable.getMessage());
+              ResponseEntity<String> resLogJob = httpClient.postDataByApi(urlAddLog, null, infoJob.jsonString());
             }
             if (consoleLog) {
               System.out.println("########### Status: " + jobExecution.getStatus());
@@ -167,15 +188,19 @@ public class QuartzJobLauncher extends QuartzJobBean {
           } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
               | JobParametersInvalidException | NoSuchJobException e) {
             try {
-              // log error
-              LogError(jobDetail, jobName, jobParam, e.getMessage(), e.getLocalizedMessage(), jobRetry);
+              /*log error*/
+              infoJob.put("success", false);
+              infoJob.put("transactionId", transactionId);
+              infoJob.put("paramJob", null);
+              infoJob.put("logMessage", "Job fail: " + e.getMessage());
+              ResponseEntity<String> resLogJob = httpClient.postDataByApi(urlAddLog, null, infoJob.jsonString());
             } catch (Exception e2) {
               if (consoleLog) {
                 System.out.println("executeInternal Job Fail: " + e2.getMessage());
               }
             }
           } finally {
-            // unlock task
+            /*delete process*/
             EJson jsonDel = new EJson();
             jsonDel.put("action", Utils.ACTION_DEL);
             jsonDel.put("transactionId", transactionId);
@@ -189,7 +214,17 @@ public class QuartzJobLauncher extends QuartzJobBean {
     } catch (Exception e) {
       try {
         // log error
-        LogError(jobDetail, null, null, e.getMessage(), e.getLocalizedMessage(), null);
+        EJson infoJobErr = new EJson();
+        infoJobErr.put("settingId", jobDetail.getKey().getName());
+        infoJobErr.put("serverIP", "");
+        infoJobErr.put("jobName", jobDetail.getDescription());
+        infoJobErr.put("jobGroup", jobDetail.getKey().getGroup());
+        infoJobErr.put("jsonParam", "");
+        infoJobErr.put("logMessage", e.getMessage());
+        infoJobErr.put("transactionId", null);
+        infoJobErr.put("paramJob", null);
+        infoJobErr.put("success", false);
+        ResponseEntity<String> resLogJob = httpClient.postDataByApi(urlAddLog, null, infoJobErr.jsonString());
       } catch (Exception e2) {
         if (consoleLog) {
           System.out.println("executeInternal Job Fail: " + e2.getMessage());
@@ -263,5 +298,13 @@ public class QuartzJobLauncher extends QuartzJobBean {
 
   public void setUrlGetJob(String urlGetJob) {
     this.urlGetJob = urlGetJob;
+  }
+
+  public String getUrlAddLog() {
+    return urlAddLog;
+  }
+
+  public void setUrlAddLog(String urlAddLog) {
+    this.urlAddLog = urlAddLog;
   }
 }

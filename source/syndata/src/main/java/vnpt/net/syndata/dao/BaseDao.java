@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import vnpt.net.syndata.configuration.SpringMVCConfiguration;
+import vnpt.net.syndata.utils.Utils;
 
 @Repository
-@Transactional("transactionManager")
 public class BaseDao extends SpringMVCConfiguration {
 
     @Autowired
@@ -37,6 +37,7 @@ public class BaseDao extends SpringMVCConfiguration {
     }
 
     /*Job multi insert bình thường*/
+    @Transactional("transactionManager")
     public int addProcessingMulti(long settingId, String transactionId, String serverIp, int isLast) {
         String sql = "INSERT INTO SCHEDULE_PROCESSING                   " +
                 "  (SETTING_ID, TRANSACTION_ID, SERVER_IP, IS_LAST)     " +
@@ -55,7 +56,9 @@ public class BaseDao extends SpringMVCConfiguration {
     }
 
     /*Single theo id job. Nếu job chưa đăng ký thì đăng ký, ngược lại không*/
+    @Transactional("transactionManager")
     public int addProcessingSingle(long settingId, String transactionId, String serverIp, int isLast) {
+        int errorCode = -1;
         String sql = "MERGE INTO SCHEDULE_PROCESSING a                   " +
                 "     USING (SELECT count(1) as count_job                " +
                 "              FROM SCHEDULE_PROCESSING t                " +
@@ -73,10 +76,11 @@ public class BaseDao extends SpringMVCConfiguration {
         parameterSource.addValue("serverIp", serverIp);
         parameterSource.addValue("isLast", isLast); //1:is last,  default 0
         try{
-            return namedParameterJdbcTemplate.update(sql, parameterSource);
+            errorCode = namedParameterJdbcTemplate.update(sql, parameterSource);
         }catch (Exception e){
-            return -1;
+            errorCode = -1;
         }
+        return errorCode;
     }
 
     public Map<String, Object> getScheduleProcessing(String transactionId) throws Exception {
@@ -110,11 +114,66 @@ public class BaseDao extends SpringMVCConfiguration {
         }
     }
 
+    @Transactional("transactionManager")
     public int delScheduleProcessing(String transactionId){
         String sql = "DELETE SCHEDULE_PROCESSING pro                " +
                 "      where pro.transaction_id = :transactionId    ";
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("transactionId", transactionId);
+        try{
+            return namedParameterJdbcTemplate.update(sql, parameterSource);
+        }catch (Exception e){
+            return -1;
+        }
+    }
+
+    @Transactional("transactionManager")
+    public int addLogError(String transactionId, long jobId, String jobName, String jobGroup, String jobDescription, String ipServer,
+                           String jsonParam, String errorMessage){
+        String sql = "INSERT INTO LOG_ERROR_PROCESS                              " +
+                "  (TRANSACTION_ID,         JOB_ID,                 JOB_NAME,    " +
+                "   JOB_GROUP,              JOB_DESCRIPTION,        IP_SERVER,   " +
+                "   JSON_PARAM,             LOG_MESSAGE)                         " +
+                "VALUES                                                          " +
+                "  (:transactionId,         :jobId,                 :jobName,    " +
+                "   :jobGroup,              :jobDescription,        :ipServer,   " +
+                "   :jsonParam,             :logMessage)";
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("transactionId", transactionId);
+        parameterSource.addValue("jobId", jobId);
+        parameterSource.addValue("jobName", jobName);
+        parameterSource.addValue("jobGroup", jobGroup);
+        parameterSource.addValue("jobDescription", jobDescription);
+        parameterSource.addValue("ipServer", ipServer);
+        parameterSource.addValue("jsonParam", jsonParam);
+        parameterSource.addValue("logMessage", errorMessage);
+        try{
+            return namedParameterJdbcTemplate.update(sql, parameterSource);
+        }catch (Exception e){
+            return -1;
+        }
+    }
+
+    @Transactional("transactionManager")
+    public int addLogSuccess(String transactionId, long jobId, String jobName, String jobGroup, String jobDescription, String ipServer,
+                           String jsonParam, String successMessage){
+        String sql = "INSERT INTO LOG_SUCCESS_PROCESS                            " +
+                "  (TRANSACTION_ID,         JOB_ID,                 JOB_NAME,    " +
+                "   JOB_GROUP,              JOB_DESCRIPTION,        IP_SERVER,   " +
+                "   JSON_PARAM,             LOG_MESSAGE)                         " +
+                "VALUES                                                          " +
+                "  (:transactionId,         :jobId,                 :jobName,    " +
+                "   :jobGroup,              :jobDescription,        :ipServer,   " +
+                "   :jsonParam,             :logMessage)";
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("transactionId", transactionId);
+        parameterSource.addValue("jobId", jobId);
+        parameterSource.addValue("jobName", jobName);
+        parameterSource.addValue("jobGroup", jobGroup);
+        parameterSource.addValue("jobDescription", jobDescription);
+        parameterSource.addValue("ipServer", ipServer);
+        parameterSource.addValue("jsonParam", jsonParam);
+        parameterSource.addValue("logMessage", successMessage);
         try{
             return namedParameterJdbcTemplate.update(sql, parameterSource);
         }catch (Exception e){
