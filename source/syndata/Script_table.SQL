@@ -43,7 +43,7 @@ create table SCHEDULE_SETTING
     maxextents unlimited
   );
 
-
+-------------------
 create table HIS_MANAGER.LOG_ERROR_PROCESS
 (
     LOG_ERROR_ID NUMBER generated always as identity,
