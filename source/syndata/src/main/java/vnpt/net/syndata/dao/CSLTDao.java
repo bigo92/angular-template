@@ -1,7 +1,7 @@
 package vnpt.net.syndata.dao;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import vnpt.net.syndata.utils.EJson;
+import vnpt.net.syndata.utils.Utils;
 
 @Repository
 public class CSLTDao extends BaseDao {
@@ -25,14 +26,13 @@ public class CSLTDao extends BaseDao {
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);
     }
 
-    public LocalDateTime getTime(String tableName) {
-        String sql = "select * from DATA_DIODE_TIME where TABLE_NAME = :tableName and IS_LAST = 1 and rownum <= 1";
+    public LocalDateTime getTime() {
+        String sql = "select * from DATA_DIODE_SYNC_ACCOM_FACILITY where IS_MAX = 1 and rownum <= 1";
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        sqlParameterSource.addValue("tableName", tableName);
 
         List<Map<String, Object>> customers = namedParameterJdbcTemplate.queryForList(sql, sqlParameterSource);
         for (Map<String, Object> item : customers) {
-            return (LocalDateTime) item.get("UPDATE_DATE");
+            return  Utils.convertToLocalDate((Date) item.get("UPDATED_DATE"));
         }
         return null;
     }

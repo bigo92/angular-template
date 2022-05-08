@@ -1,0 +1,204 @@
+<div class="page-header page-header-light">
+  <div class="breadcrumb-line breadcrumb-line-light header-elements-md-inline">
+    <div class="d-flex">
+      <div class="breadcrumb">
+        <a [routerLink]="['/']" class="breadcrumb-item"
+          ><i class="icon-home2 mr-2"></i> Trang chủ</a
+        >
+        <a href="javascript:;" class="breadcrumb-item">Example</a>
+        <a href="javascript:;" class="breadcrumb-item">Quản lý</a>
+        <span class="breadcrumb-item active">Form mẫu</span>
+      </div>
+    </div>
+    <div class="header-elements d-none">
+      <div class="breadcrumb justify-content-center">
+        <a href="#" class="breadcrumb-elements-item">
+          <i class="icon-stats-bars2 mr-2"></i>
+          Báo cáo A
+        </a>
+
+        <div class="breadcrumb-elements-item dropdown p-0">
+          <a
+            href="#"
+            class="breadcrumb-elements-item dropdown-toggle"
+            data-toggle="dropdown"
+          >
+            <i class="icon-download mr-2"></i>
+            Kết xuất
+          </a>
+
+          <div class="dropdown-menu dropdown-menu-right">
+            <a href="#" class="dropdown-item"
+              ><i class="icon-user-lock"></i> Báo cáo 1</a
+            >
+            <a href="#" class="dropdown-item"
+              ><i class="icon-statistics"></i> Báo cáo 2</a
+            >
+            <a href="#" class="dropdown-item"
+              ><i class="icon-accessibility"></i> Báo cáo 3</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content pt-10">
+  <div class="header-elements-inline">
+    <div class="navbar-expand-md w-100">
+      <div class="padding-left-15 text-right d-md-none w-100 row">
+        <button
+          class="navbar-toggler"
+          data-target="#search-list"
+          data-toggle="collapse"
+          type="button"
+        >
+          <i nz-icon nzType="menu" nzTheme="outline"></i>
+        </button>
+      </div>
+      <div class="navbar-collapse collapse" id="search-list">
+        <form
+          *ngIf="formSearch"
+          [formGroup]="formSearch"
+          class="w-100"
+          (ngSubmit)="getData()"
+          novalidate
+        >
+          <ng-template #controlErrorTpl let-control>
+            <app-render-errors [control]="control"></app-render-errors>
+          </ng-template>
+          <div class="row">
+            <div class="col-md-3">
+              <nz-form-item>
+                <nz-form-label>Tìm theo tên</nz-form-label>
+                <nz-form-control [nzErrorTip]="controlErrorTpl">
+                  <input-text-search
+                    placeholder="Nhập từ khóa tìm kiếm"
+                    formControlName="name"
+                  >
+                  </input-text-search>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+          <button type="submit" hidden>Tìm kiếm</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="hearder-table">
+    <nz-tabset nzType="card">
+      <nz-tab nzTitle="Danh sách dữ liệu">
+        <ng-template [ngTemplateOutlet]="tab1"></ng-template>
+      </nz-tab>
+    </nz-tabset>
+    <div class="btn-search">
+      <div class="btn-group">
+        <button type="button" class="btn bg-teal">
+          <i class="icon-sync"></i>
+        </button>
+        <button type="button" class="btn bg-teal-400">
+          <i class="icon-search4 mr-2"></i>
+          Tìm kiếm
+        </button>
+        <button type="button" class="btn bg-teal">
+          <i class="icon-menu7"></i>
+        </button>
+      </div>
+    </div>
+    <div class="lst-controls">
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="addDataDialog(); kv = 1"
+      >
+        <i class="icon-plus-circle2 mr-2"></i>Thêm
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="them1Dong()"
+      >
+        <i class="icon-plus-circle2 mr-2"></i>Thêm 222
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-outline-danger"
+        (click)="deleteData(tableConfig.getItemSelectedArray()); kv = 2"
+      >
+        <i class="icon-bin mr-2"></i>Xóa
+      </button>
+
+      <button type="button" class="btn btn-outline-success" (click)="showData()">
+        <i class="icon-checkmark3 mr-2"></i>Phê duyệt
+      </button>
+    </div>
+  </div>
+
+  <!-- <hr class="mt-0 margin-bottom-10" /> -->
+
+  <ng-template #tab1>
+    <nz-table
+      [nzData]="listOfData"
+      [nzLoading]="isLoading"
+      [nzBordered]="true"
+      [nzFrontPagination]="false"
+      nzSize="small"
+      [nzScroll]="{ x: 'auto' }"
+    >
+      <thead>
+        <tr>
+          <th
+            nzWidth="40px"
+            [nzChecked]="tableConfig.isAllChecked"
+            [nzIndeterminate]="tableConfig.indeterminate"
+            (nzCheckedChange)="tableConfig.onAllChecked($event, listOfData)"
+          ></th>
+          <th>Stt</th>
+          <th>Mã</th>
+          <th>Tên</th>
+          <th>Combobox</th>
+          <th>Date text</th>
+          <th>Date time</th>
+          <th class="action text-center">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of lisData; let i = index">
+          <ng-container *ngIf="item.edit === true;else templateName">
+            <td>
+              {{ item.id }}
+            </td>
+            <td>
+              <a class="data-link" href="javascript:;">
+                <input type="text" [(ngModel)]="item.name" />
+              </a>
+            </td>
+            <td>
+              <a (click)="item.edit = false">Luu</a>
+            </td>
+          </ng-container>
+          <ng-template #templateName>
+            <td>
+              {{ item.id }}
+            </td>
+            <td>
+              <a class="data-link" href="javascript:;">
+                {{ item.name }}
+              </a>
+            </td>
+            <td>
+              <a (click)="item.edit = true">Sua</a>
+            </td>
+          </ng-template>
+        </tr>
+      </tbody>
+    </nz-table>
+    <app-paging [data]="paging" (onChange)="getData($event)"></app-paging>
+  </ng-template>
+
+</div>

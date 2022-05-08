@@ -163,7 +163,7 @@ public class EJson {
 		if (!hasValue(key)) {
 			return null;
 		}
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		return formatter.parse(getString(key));
 	}
 
@@ -197,4 +197,5 @@ public class EJson {
 		json.getAsJsonObject().add(key, element);
 	}
 
+	
 }

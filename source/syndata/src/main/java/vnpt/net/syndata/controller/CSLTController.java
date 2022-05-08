@@ -2,6 +2,7 @@ package vnpt.net.syndata.controller;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -34,20 +35,22 @@ public class CSLTController {
         return "abc";
     }
 
-    @RequestMapping(value = "/get-data", method = RequestMethod.GET)
-    public @ResponseBody String getData() throws Exception {
+    @RequestMapping(value = "/get-AccomFacility", method = RequestMethod.GET)
+    public @ResponseBody String getAccomFacility() throws Exception {
         EJson header = new EJson();
         header.put("Authorization", "Basic ZGF0YWRpb2RlOmRhdGFkaW9kZTEyMw==");
 
         Number page = 0;
-        LocalDateTime startDate = csltDao.getTime(tableName);
+
+        LocalDateTime startDate = csltDao.getTime();
         if (startDate == null) {
             startDate = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
         }
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         EJson param = new EJson();
         param.put("syncType", "SYNC_ACCOM_FACILITY");
-        param.put("date", "2022-04-05T11:11:11");
+        param.put("date", startDate.format(formatter));
         param.put("page", page);
         param.put("size", "250");
         ResponseEntity<String> result = http.getApi("http://10.100.131.226:8009/api/sync", param, header);
@@ -55,19 +58,93 @@ public class CSLTController {
         if (resultJson.getBoolean("success")) {
             List<EJson> resultData = resultJson.getJSONArray("data");
             for (EJson item : resultData) {
-                LocalDateTime updateDate = item.getDate("createDate") != null 
-                        ? Utils.convertToLocalDate((Date)item.getDate("createDate"))
-                        : Utils.convertToLocalDate((Date)item.getDate("updateDate"));
+                LocalDateTime updateDate = item.getDate("createdDate") != null 
+                        ? Utils.convertToLocalDate((Date)item.getDate("createdDate"))
+                        : Utils.convertToLocalDate((Date)item.getDate("updatedDate"));
                 if(updateDate.toEpochSecond(ZoneOffset.UTC) > startDate.toEpochSecond(ZoneOffset.UTC)){
                     startDate = updateDate;
                 }
                 csltDao.insertCslt(item);
             }
         }
-        csltDao.insertTime(tableName, startDate);
 
         return "ok";
     }
+
+    @RequestMapping(value = "/get-RegisAccomRepResentative", method = RequestMethod.GET)
+    public @ResponseBody String getRegisAccomRepResentative() throws Exception {
+        EJson header = new EJson();
+        header.put("Authorization", "Basic ZGF0YWRpb2RlOmRhdGFkaW9kZTEyMw==");
+
+        Number page = 0;
+
+        LocalDateTime startDate = csltDao.getTime();
+        if (startDate == null) {
+            startDate = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        EJson param = new EJson();
+        param.put("syncType", "SYNC_ACCOM_REPRESENTATIVE");
+        param.put("date", startDate.format(formatter));
+        param.put("page", page);
+        param.put("size", "250");
+        ResponseEntity<String> result = http.getApi("http://10.100.131.226:8009/api/sync", param, header);
+        EJson resultJson = new EJson(result.getBody());
+        if (resultJson.getBoolean("success")) {
+            List<EJson> resultData = resultJson.getJSONArray("data");
+            for (EJson item : resultData) {
+                LocalDateTime updateDate = item.getDate("createdDate") != null 
+                        ? Utils.convertToLocalDate((Date)item.getDate("createdDate"))
+                        : Utils.convertToLocalDate((Date)item.getDate("updatedDate"));
+                if(updateDate.toEpochSecond(ZoneOffset.UTC) > startDate.toEpochSecond(ZoneOffset.UTC)){
+                    startDate = updateDate;
+                }
+                csltDao.insertCslt(item);
+            }
+        }
+
+        return "ok";
+    }
+
+    @RequestMapping(value = "/get-RegisGoverningBody", method = RequestMethod.GET)
+    public @ResponseBody String getRegisGoverningBody() throws Exception {
+        EJson header = new EJson();
+        header.put("Authorization", "Basic ZGF0YWRpb2RlOmRhdGFkaW9kZTEyMw==");
+
+        Number page = 0;
+
+        LocalDateTime startDate = csltDao.getTime();
+        if (startDate == null) {
+            startDate = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        EJson param = new EJson();
+        param.put("syncType", "SYNC_REGIS_GOVERNING_BODY");
+        param.put("date", startDate.format(formatter));
+        param.put("page", page);
+        param.put("size", "250");
+        ResponseEntity<String> result = http.getApi("http://10.100.131.226:8009/api/sync", param, header);
+        EJson resultJson = new EJson(result.getBody());
+        if (resultJson.getBoolean("success")) {
+            List<EJson> resultData = resultJson.getJSONArray("data");
+            for (EJson item : resultData) {
+                LocalDateTime updateDate = item.getDate("createdDate") != null 
+                        ? Utils.convertToLocalDate((Date)item.getDate("createdDate"))
+                        : Utils.convertToLocalDate((Date)item.getDate("updatedDate"));
+                if(updateDate.toEpochSecond(ZoneOffset.UTC) > startDate.toEpochSecond(ZoneOffset.UTC)){
+                    startDate = updateDate;
+                }
+                csltDao.insertCslt(item);
+            }
+        }
+
+        return "ok";
+    }
+
+
+    // ******************* marge payload ***********************//
 
     @RequestMapping(value = "/merge-data", method = RequestMethod.GET)
     public @ResponseBody String mergeData() throws Exception {

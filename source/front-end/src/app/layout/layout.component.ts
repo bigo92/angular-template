@@ -14,7 +14,7 @@ export class LayoutComponent implements OnInit {
   constructor(private dialogService: DialogService) { }
 
   ngOnInit(): void {
-    this.dialogService.error('a','aaa');
+    // this.dialogService.error('a','aaa');
 
   }
 

@@ -98,5 +98,30 @@
     "name": "quartz.log.delete-skip-log-has-file",
     "type": "java.lang.String",
     "description": "A description for 'quartz.log.delete-skip-log-has-file'"
+  },
+  {
+    "name": "api.get.noti.stay",
+    "type": "java.lang.String",
+    "description": "A description for 'api.get.noti.stay'"
+  },
+  {
+    "name": "api.system.dothing",
+    "type": "java.lang.String",
+    "description": "A description for 'api.system.dothing'"
+  },
+  {
+    "name": "api.system.getjob",
+    "type": "java.lang.String",
+    "description": "A description for 'api.system.getjob'"
+  },
+  {
+    "name": "api.system.addlog",
+    "type": "java.lang.String",
+    "description": "A description for 'api.system.addlog'"
+  },
+  {
+    "name": "spring.datasource.driver",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.driver'"
   }
 ]}

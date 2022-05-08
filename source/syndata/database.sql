@@ -22,13 +22,63 @@ create table DATA_DIODE_SCHEDULE_PROCESSING
   CREATE_DATE    TIMESTAMP(6) default current_timestamp
 )
 
-CREATE TABLE DATA_DIODE_TIME
-(
+----------------  NOTI_STAY  ------------------------
+create table DATA_DIODE_SYNC_NOTI_STAY (
     GUID varchar2(32) primary key not null,
-    TABLE_NAME varchar2(255) not null,
-    UPDATE_DATE TIMESTAMP(6) not null,
-    IS_LAST NUMBER(1) default 1 not null
-)
+    PAYLOAD clob,
+    IS_LAST NUMBER(1) default 0,
+    IS_MAX NUMBER(1) default 0,
+    PROCESS_ID varchar2(32),
+    PROCESS_DATE TIMESTAMP(6),
+    PROCESS_STATUS number(1),
+    PROCESS_MESS varchar2(500)
+);
+
+ALTER TABLE DATA_DIODE_SYNC_NOTI_STAY
+ADD ID NUMBER AS (JSON_VALUE(PAYLOAD, '$.id' returning NUMBER));
+
+ALTER TABLE DATA_DIODE_SYNC_NOTI_STAY
+ADD UPDATED_DATE TIMESTAMP AS (NVL(TO_DATE(JSON_VALUE(PAYLOAD,'$.updatedDate'),'YYYY-MM-DD"T"HH24:MI:SS'),TO_DATE(JSON_VALUE(PAYLOAD,'$.createdDate'),'YYYY-MM-DD"T"HH24:MI:SS')));
+
+create table DATA_DIODE_SYNC_NOTI_STAY_REF (
+    GUID varchar2(32) primary key not null,
+    PAYLOAD clob,
+    IS_LAST NUMBER(1) default 0,
+    IS_MAX NUMBER(1) default 0,
+    PROCESS_ID varchar2(32),
+    PROCESS_DATE TIMESTAMP(6),
+    PROCESS_STATUS number(1),
+    PROCESS_MESS varchar2(500)
+);
+
+ALTER TABLE DATA_DIODE_SYNC_NOTI_STAY_REF
+ADD ID NUMBER AS (JSON_VALUE(PAYLOAD, '$.id' returning NUMBER));
+
+ALTER TABLE DATA_DIODE_SYNC_NOTI_STAY_REF
+ADD UPDATED_DATE TIMESTAMP AS (NVL(TO_DATE(JSON_VALUE(PAYLOAD,'$.updatedDate'),'YYYY-MM-DD"T"HH24:MI:SS'),TO_DATE(JSON_VALUE(PAYLOAD,'$.createdDate'),'YYYY-MM-DD"T"HH24:MI:SS')));
+
+create table DATA_DIODE_SYNC_NOTI_STAY_MERGE (
+    GUID varchar2(32) primary key not null,
+    PAYLOAD clob,
+    PAYLOAD_MERGE clob,
+    PAYLOAD_MERGE_REF clob,
+    PROCESS_ID varchar2(32),
+    PROCESS_DATE TIMESTAMP(6),
+    PROCESS_STATUS number(1),
+    PROCESS_MESS varchar2(500),
+    PROCESS_ID_REF varchar2(32),
+    PROCESS_DATE_REF TIMESTAMP(6),
+    PROCESS_STATUS_REF number(1),
+    PROCESS_MESS_REF varchar2(500)
+);
+
+ALTER TABLE DATA_DIODE_SYNC_NOTI_STAY_MERGE
+ADD ID NUMBER AS (JSON_VALUE(PAYLOAD, '$.id' returning NUMBER));
+
+ALTER TABLE DATA_DIODE_SYNC_NOTI_STAY_MERGE
+ADD ID_REF NUMBER AS (JSON_VALUE(PAYLOAD, '$.id_ref' returning NUMBER));
+-----------------------------------------------------
+
 
 create table DATA_DIODE_SYNC_ACCOM_FACILITY
 as
