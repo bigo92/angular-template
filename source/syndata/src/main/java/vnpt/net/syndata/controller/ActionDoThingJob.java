@@ -38,13 +38,13 @@ public class ActionDoThingJob {
             }else {
                 errorCode = baseDao.addProcessingMulti(jobId, transactionId, serverIP, isLast);
             }
-            mapResult.put("transactionId", errorCode >= 0 ? transactionId : "");
+            mapResult.put("transactionId", errorCode > 0 ? transactionId : "");
         }
 
         if (action.equals(Utils.ACTION_DEL)){
             String transactionId = jsonParam.getString("transactionId");
             errorCode = baseDao.delScheduleProcessing(transactionId);
-            mapResult.put("transactionId", errorCode >= 0 ? transactionId : "");
+            mapResult.put("transactionId", errorCode > 0 ? transactionId : "");
         }
         mapResult.put("errorCode", errorCode);
         return ResponseEntity.ok(mapResult);
@@ -79,7 +79,8 @@ public class ActionDoThingJob {
         int errorCode = -1;
 
         if (success){
-            errorCode = baseDao.addLogSuccess(transactionId, jobId, jobName, jobGroup, "", ipServer, paramJob, logMessage);
+            String bodyContent = jsonParam.getString("bodyContent");
+            errorCode = baseDao.addLogSuccess(transactionId, jobId, jobName, jobGroup, "", ipServer, paramJob, logMessage, bodyContent);
         }else {
             errorCode = baseDao.addLogError(transactionId, jobId, jobName, jobGroup, "", ipServer, paramJob, logMessage);
         }
