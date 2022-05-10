@@ -56,11 +56,11 @@ public class NotiStayDao extends BaseDao {
 
     @Transactional("transactionManager")
     public void lockDataMerge(String processId, Number size, Number jobTimeOut) {
-        String sql = "UPDATE " + tableName
-                + " SET PROCESS_ID = :processId, PROCESS_DATE = SYSTIMESTAMP, PROCESS_STATUS = 1"
-                + " WHERE PROCESS_ID is null AND"
+        String sql = "UPDATE " + tableName + " a"
+                + " SET a.PROCESS_ID = :processId, a.PROCESS_DATE = SYSTIMESTAMP, a.PROCESS_STATUS = 1"
+                + " WHERE a.PROCESS_ID is null AND a.IS_LAST = 1 AND"
                 + " NOT EXISTS(select 1 from " + tableName
-                + "_MERGE m where m.ID = ID AND (m.PROCESS_STATUS <> 3 OR m.PROCESS_STATUS_REF <> 3)) AND"
+                + "_MERGE b where b.ID = a.ID AND b.SYN_STATUS = 0) AND"
                 + " rownum <= :size";
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
@@ -74,11 +74,11 @@ public class NotiStayDao extends BaseDao {
             LocalDateTime timeDelay = LocalDateTime.now();
             timeDelay = timeDelay.plusMinutes(jobTimeOut.longValue() * -1);
 
-            sql = "UPDATE " + tableName
-                    + " SET PROCESS_ID = :processId, PROCESS_DATE = SYSTIMESTAMP, PROCESS_STATUS = 1"
-                    + " WHERE PROCESS_STATUS in (1,2) AND PROCESS_DATE <= :timeDelay AND"
+            sql = "UPDATE " + tableName + " a"
+                    + " SET a.PROCESS_ID = :processId, a.PROCESS_DATE = SYSTIMESTAMP, a.PROCESS_STATUS = 1"
+                    + " WHERE a.PROCESS_STATUS in (1,2) AND a.IS_LAST = 1 AND a.PROCESS_DATE <= :timeDelay AND"
                     + " NOT EXISTS(select 1 from " + tableName
-                    + "_MERGE m where m.ID = ID AND (m.PROCESS_STATUS <> 3 OR m.PROCESS_STATUS_REF <> 3)) AND"
+                    + "_MERGE b where b.ID = a.ID AND b.SYN_STATUS = 0) AND"
                     + " rownum <= :size";
 
             sqlParameterSource = new MapSqlParameterSource();
